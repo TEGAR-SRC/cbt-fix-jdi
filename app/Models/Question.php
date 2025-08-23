@@ -1,0 +1,37 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+class Question extends Model
+{
+    /**
+     * fillable
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'exam_id',
+        'question',
+    'image_path',
+    'audio_path',
+    'video_path',
+        'option_1',
+        'option_2',
+        'option_3',
+        'option_4',
+        'option_5',
+        'answer',
+    ];
+
+    /**
+     * exam
+     *
+     * @return void
+     */
+    public function exam()
+    {
+        return $this->belongsTo(Exam::class);
+    }
+}
