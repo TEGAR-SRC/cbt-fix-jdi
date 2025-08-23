@@ -72,18 +72,22 @@
   </div>
 </template>
 <script>
+import AdminLayout from '../../../Layouts/Admin.vue';
 import DinasLayout from '../../../Layouts/Dinas.vue';
 import Pagination from '../../../Components/Pagination.vue';
 import { Head, Link, router } from '@inertiajs/vue3';
 import { ref, watch } from 'vue';
+
+// Determine if this page is being accessed via the Admin proxy routes
+const isAdminProxy = typeof window !== 'undefined' && window.location.pathname.startsWith('/admin/dinas');
+
 export default {
-  layout: DinasLayout,
+  layout: isAdminProxy ? AdminLayout : DinasLayout,
   components: { Head, Link, Pagination },
   props: { sessions: Array, grades: Object, stats: Object, filters: Object },
   setup(props){
     const selectedSession = ref(props.filters?.exam_session_id || '');
     watch(selectedSession, () => {
-      const base = __VUE_PROD_DEVTOOLS__ ? '/dinas/monitor' : '/dinas/monitor';
       const path = (typeof window !== 'undefined' && window.location.pathname.startsWith('/admin/dinas'))
         ? '/admin/dinas/monitor'
         : '/dinas/monitor';

@@ -154,7 +154,7 @@
                     </Link>
                 </li>
 
-                <li class="nav-item">
+                <li class="nav-item" :class="{ 'active': $page.url.startsWith('/admin/dinas') }">
                     <Link href="/admin/dinas" class="nav-link d-flex justify-content-between">
                     <span>
                         <span class="sidebar-icon">

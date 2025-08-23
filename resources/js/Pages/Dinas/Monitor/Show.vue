@@ -29,10 +29,15 @@
   </div>
 </template>
 <script>
+import AdminLayout from '../../../Layouts/Admin.vue';
 import DinasLayout from '../../../Layouts/Dinas.vue';
 import { Head, Link } from '@inertiajs/vue3';
+
+// Determine if this page is being accessed via the Admin proxy routes
+const isAdminProxy = typeof window !== 'undefined' && window.location.pathname.startsWith('/admin/dinas');
+
 export default {
-  layout: DinasLayout,
+  layout: isAdminProxy ? AdminLayout : DinasLayout,
   components: { Head, Link },
   props: { grade: Object, answers: Array }
 }
