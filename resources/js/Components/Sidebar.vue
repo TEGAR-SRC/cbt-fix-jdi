@@ -137,6 +137,20 @@
                     </Link>
                 </li>
 
+                <li class="nav-item" :class="{ 'active': $page.url.startsWith('/admin/admins') }">
+                    <Link href="/admin/admins/create" class="nav-link d-flex justify-content-between">
+                    <span>
+                        <span class="sidebar-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-person-plus icon icon-xs me-2" viewBox="0 0 16 16">
+                                <path d="M6 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H1s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C9.516 10.68 8.289 10 6 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z"/>
+                                <path fill-rule="evenodd" d="M13.5 5a.5.5 0 0 1 .5.5V7h1.5a.5.5 0 0 1 0 1H14v1.5a.5.5 0 0 1-1 0V8h-1.5a.5.5 0 0 1 0-1H13V5.5a.5.5 0 0 1 .5-.5z"/>
+                            </svg>
+                        </span>
+                        <span class="sidebar-text">Tambah Admin</span>
+                    </span>
+                    </Link>
+                </li>
+
                 <li class="nav-item" :class="{ 'active': $page.url.startsWith('/admin/lessons') }">
                     <Link href="/admin/lessons" class="nav-link d-flex justify-content-between">
                     <span>
@@ -241,6 +255,93 @@
 
                 <li role="separator" class="dropdown-divider mt-3 mb-2 border-gray-700"></li>
 
+                <!-- Section: Proctoring & Keamanan -->
+                <li class="nav-item mt-2 mb-1"><span class="sidebar-text text-uppercase text-muted small">Proctoring &amp; Keamanan</span></li>
+
+                <li class="nav-item" :class="{ 'active': $page.url.startsWith('/admin/proctoring/sessions') }">
+                    <Link href="/admin/proctoring/sessions" class="nav-link d-flex justify-content-between">
+                    <span>
+                        <span class="sidebar-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-camera-video icon icon-xs me-2" viewBox="0 0 16 16">
+                                <path d="M0 4a2 2 0 0 1 2-2h7.5a2 2 0 0 1 1.983 1.738l3.11-1.382A1 1 0 0 1 16 5.269v7.462a1 1 0 0 1-1.406.913l-3.111-1.382A2 2 0 0 1 9.5 13H2a2 2 0 0 1-2-2V4zm4.5 1a.5.5 0 1 0 0 1 .5.5 0 0 0 0-1zm0 2a.5.5 0 1 0 0 1 .5.5 0 0 0 0-1z"/>
+                            </svg>
+                        </span>
+                        <span class="sidebar-text">Sesi Proctoring</span>
+                    </span>
+                    </Link>
+                </li>
+
+                <li class="nav-item" :class="{ 'active': $page.url.startsWith('/admin/proctoring/violations') }">
+                    <Link href="/admin/proctoring/violations" class="nav-link d-flex justify-content-between">
+                    <span>
+                        <span class="sidebar-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-exclamation-triangle icon icon-xs me-2" viewBox="0 0 16 16">
+                                <path d="M7.938 2.016A.13.13 0 0 1 8.002 2a.13.13 0 0 1 .063.016.146.146 0 0 1 .054.057l6.857 11.667c.036.06.035.124.002.183a.163.163 0 0 1-.054.06.116.116 0 0 1-.066.017H1.146a.115.115 0 0 1-.066-.017.163.163 0 0 1-.054-.06.176.176 0 0 1 .002-.183L7.884 2.073a.147.147 0 0 1 .054-.057zm1.044-.45a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566z"/>
+                                <path d="M7.002 12a1 1 0 1 1 2 0 1 1 0 0 1-2 0zM7.1 5.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995z"/>
+                            </svg>
+                        </span>
+                        <span class="sidebar-text">Pelanggaran</span>
+                    </span>
+                    </Link>
+                </li>
+
+                <li class="nav-item" :class="{ 'active': $page.url.startsWith('/admin/proctoring/photos') }">
+                    <Link href="/admin/proctoring/photos" class="nav-link d-flex justify-content-between">
+                    <span>
+                        <span class="sidebar-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-camera icon icon-xs me-2" viewBox="0 0 16 16">
+                                <path d="M15 12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h1.172a3 3 0 0 0 2.12-.879l.83-.828A1 1 0 0 1 6.827 3h2.344a1 1 0 0 1 .707.293l.828.828A3 3 0 0 0 12.828 5H14a1 1 0 0 1 1 1v6zM2 4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-1.172a2 2 0 0 1-1.414-.586l-.828-.828A2 2 0 0 0 9.172 2H6.828a2 2 0 0 0-1.414.586l-.828.828A2 2 0 0 1 3.172 4H2z"/>
+                                <path d="M8 11a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5zm0 1a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7zM3 6.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0z"/>
+                            </svg>
+                        </span>
+                        <span class="sidebar-text">Foto Proctoring</span>
+                    </span>
+                    </Link>
+                </li>
+
+                <li class="nav-item" :class="{ 'active': $page.url.startsWith('/admin/proctoring/activities') }">
+                    <Link href="/admin/proctoring/activities" class="nav-link d-flex justify-content-between">
+                    <span>
+                        <span class="sidebar-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-activity icon icon-xs me-2" viewBox="0 0 16 16">
+                                <path fill-rule="evenodd" d="M6 2a.5.5 0 0 1 .47.33L8.667 8.5l1.2-3a.5.5 0 0 1 .933.002L12.5 9H15a.5.5 0 0 1 0 1h-2.8a.5.5 0 0 1-.467-.324L10.8 7.5l-1.2 3a.5.5 0 0 1-.934 0L6.53 3.67 5.2 7H1a.5.5 0 0 1 0-1h3.6a.5.5 0 0 1 .467.324L6 2z"/>
+                            </svg>
+                        </span>
+                        <span class="sidebar-text">Log Aktivitas</span>
+                    </span>
+                    </Link>
+                </li>
+
+                <li class="nav-item" :class="{ 'active': $page.url.startsWith('/admin/proctoring/network') }">
+                    <Link href="/admin/proctoring/network" class="nav-link d-flex justify-content-between">
+                    <span>
+                        <span class="sidebar-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-wifi icon icon-xs me-2" viewBox="0 0 16 16">
+                                <path d="M15.384 6.115a.485.485 0 0 0-.047-.736A12.444 12.444 0 0 0 8 3C5.259 3 2.723 3.882.663 5.379a.485.485 0 0 0-.047.736.525.525 0 0 0 .668.05A11.448 11.448 0 0 1 8 4c2.507 0 4.827.892 6.716 2.164a.525.525 0 0 0 .668-.05z"/>
+                                <path d="M13.229 8.271a.482.482 0 0 0-.063-.745A9.455 9.455 0 0 0 8 6c-1.905 0-3.68.56-5.166 1.526a.48.48 0 0 0-.063.745.525.525 0 0 0 .652.065A8.46 8.46 0 0 1 8 7a8.46 8.46 0 0 1 4.576 1.336c.206.132.48.108.653-.065zm-2.183 2.183c.226-.226.185-.605-.1-.75A6.473 6.473 0 0 0 8 9c-1.06 0-2.062.254-2.946.704-.285.145-.326.524-.1.75l.015.015c.16.16.407.19.611.09A5.478 5.478 0 0 1 8 10c.868 0 1.69.201 2.42.56.203.1.45.07.61-.091l.016-.015zM9.06 12.44c.196-.196.198-.52-.04-.66A1.99 1.99 0 0 0 8 11.5a1.99 1.99 0 0 0-1.02.28c-.238.14-.236.464-.04.66l.706.706a.5.5 0 0 0 .708 0l.707-.707z"/>
+                            </svg>
+                        </span>
+                        <span class="sidebar-text">Status Jaringan</span>
+                    </span>
+                    </Link>
+                </li>
+
+                <li class="nav-item" :class="{ 'active': $page.url.startsWith('/admin/proctoring/settings') }">
+                    <Link href="/admin/proctoring/settings" class="nav-link d-flex justify-content-between">
+                    <span>
+                        <span class="sidebar-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-gear icon icon-xs me-2" viewBox="0 0 16 16">
+                                <path d="M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492zM5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0z"/>
+                                <path d="M9.796 1.343c-.527-1.79-3.065-1.79-3.592 0l-.094.319a.873.873 0 0 1-1.255.52l-.292-.16c-1.64-.892-3.433.902-2.54 2.541l.159.292a.873.873 0 0 1-.52 1.255l-.319.094c-1.79.527-1.79 3.065 0 3.592l.319.094a.873.873 0 0 1 .52 1.255l-.16.292c-.892 1.64.901 3.434 2.541 2.54l.292-.159a.873.873 0 0 1 1.255.52l.094.319c.527 1.79 3.065 1.79 3.592 0l.094-.319a.873.873 0 0 1 1.255-.52l.292.16c1.64.893 3.434-.902 2.54-2.541l-.159-.292a.873.873 0 0 1 .52-1.255l.319-.094c1.79-.527 1.79-3.065 0-3.592l-.319-.094a.873.873 0 0 1-.52-1.255l.16-.292c.893-1.64-.902-3.433-2.541-2.54l-.292.159a.873.873 0 0 1-1.255-.52l-.094-.319zm-2.633.283c.246-.835 1.428-.835 1.674 0l.094.319a1.873 1.873 0 0 0 2.693 1.115l.291-.16c.764-.415 1.6.42 1.184 1.185l-.159.292a1.873 1.873 0 0 0 1.116 2.692l.318.094c.835.246.835 1.428 0 1.674l-.319.094a1.873 1.873 0 0 0-1.115 2.693l.16.291c.415.764-.42 1.6-1.185 1.184l-.291-.159a1.873 1.873 0 0 0-2.693 1.116l-.094.318c-.246.835-1.428.835-1.674 0l-.094-.319a1.873 1.873 0 0 0-2.692-1.115l-.292-.16c-.764-.415-1.6.42-1.184 1.185l.159.292A1.873 1.873 0 0 0 1.945 8.93l-.319.094c-.835.246-.835 1.428 0 1.674l.319.094a1.873 1.873 0 0 0 1.115 2.692l-.16.291c-.415.764.42 1.6 1.185 1.184l.292-.159a1.873 1.873 0 0 0 2.692 1.115l.094.319z"/>
+                            </svg>
+                        </span>
+                        <span class="sidebar-text">Pengaturan</span>
+                    </span>
+                    </Link>
+                </li>
+
+                <li role="separator" class="dropdown-divider mt-3 mb-2 border-gray-700"></li>
+
                 <!-- Section: Laporan -->
                 <li class="nav-item mt-2 mb-1"><span class="sidebar-text text-uppercase text-muted small">Laporan</span></li>
 
@@ -312,7 +413,7 @@
                 <li role="separator" class="dropdown-divider mt-2 mb-2 border-gray-700"></li>
 
                 <li class="nav-item">
-                    <Link href="/logout" method="post" as="button" class="nav-link d-flex justify-content-between w-100 text-start">
+                    <Link href="/logout" method="post" as="button" class="nav-link nav-link-logout d-flex justify-content-between w-100 text-start">
                     <span>
                         <span class="sidebar-icon">
                             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-box-arrow-right icon icon-xs me-2" viewBox="0 0 16 16">
@@ -347,4 +448,34 @@ export default {
 </script>
 
 <style>
+/* Styling untuk tombol keluar */
+.nav-link-logout {
+    background-color: #dc3545 !important; /* Warna merah untuk tombol keluar */
+    color: #ffffff !important;
+    border-radius: 8px;
+    margin-top: 8px;
+    transition: all 0.3s ease;
+}
+
+.nav-link-logout:hover {
+    background-color: #c82333 !important; /* Warna merah lebih gelap saat hover */
+    color: #ffffff !important;
+    transform: translateX(2px);
+}
+
+.nav-link-logout:focus,
+.nav-link-logout:active {
+    background-color: #bd2130 !important;
+    color: #ffffff !important;
+    box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+}
+
+.nav-link-logout .sidebar-icon {
+    color: #ffffff !important;
+}
+
+.nav-link-logout .sidebar-text {
+    color: #ffffff !important;
+    font-weight: 500;
+}
 </style>

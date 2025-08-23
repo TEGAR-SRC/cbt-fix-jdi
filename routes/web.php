@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Inertia\Inertia;
 
 //prefix "admin"
 Route::prefix('admin')->group(function() {
@@ -98,6 +99,35 @@ Route::prefix('admin')->group(function() {
     // monitoring routes
     Route::get('/monitor', [\App\Http\Controllers\Admin\MonitorController::class, 'index'])->name('admin.monitor.index');
     Route::get('/monitor/{grade}', [\App\Http\Controllers\Admin\MonitorController::class, 'show'])->name('admin.monitor.show');
+
+    // proctoring routes
+    Route::get('/proctoring/sessions', function () {
+        return Inertia::render('Admin/Proctoring/Sessions');
+    })->name('admin.proctoring.sessions');
+
+    Route::get('/proctoring/violations', function () {
+        return Inertia::render('Admin/Proctoring/Violations');
+    })->name('admin.proctoring.violations');
+
+    Route::get('/proctoring/photos', function () {
+        return Inertia::render('Admin/Proctoring/Photos');
+    })->name('admin.proctoring.photos');
+
+    Route::get('/proctoring/activities', function () {
+        return Inertia::render('Admin/Proctoring/Activities');
+    })->name('admin.proctoring.activities');
+
+    Route::get('/proctoring/network', function () {
+        return Inertia::render('Admin/Proctoring/Network');
+    })->name('admin.proctoring.network');
+
+    Route::get('/proctoring/settings', function () {
+        return Inertia::render('Admin/Proctoring/Settings');
+    })->name('admin.proctoring.settings');
+    
+    Route::get('/test-sidebar', function () {
+        return Inertia::render('Admin/TestSidebar');
+    })->name('admin.test.sidebar');
     Route::post('/monitor/{grade}/unlock', [\App\Http\Controllers\Admin\MonitorController::class, 'unlock'])->name('admin.monitor.unlock');
     Route::post('/monitor/{grade}/stop', [\App\Http\Controllers\Admin\MonitorController::class, 'stop'])->name('admin.monitor.stop');
     Route::post('/monitor/{grade}/reopen', [\App\Http\Controllers\Admin\MonitorController::class, 'reopen'])->name('admin.monitor.reopen');

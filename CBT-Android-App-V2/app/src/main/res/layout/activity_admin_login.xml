@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/admin_background"
+    tools:context=".ui.admin.AdminLoginActivity">
+
+    <!-- Header Section -->
+    <LinearLayout
+        android:id="@+id/header_section"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="32dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed">
+
+        <!-- Logo -->
+        <ImageView
+            android:id="@+id/iv_logo"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="24dp"
+            android:contentDescription="@string/app_name"
+            android:src="@drawable/ic_cbt_logo"
+            app:tint="@color/admin_primary" />
+
+        <!-- Title -->
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="8dp"
+            android:text="@string/admin_login_title"
+            android:textColor="@color/admin_text"
+            android:textSize="28sp"
+            android:textStyle="bold"
+            app:fontFamily="@font/roboto_bold" />
+
+        <!-- Subtitle -->
+        <TextView
+            android:id="@+id/tv_subtitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="@string/admin_login_subtitle"
+            android:textColor="@color/admin_text_secondary"
+            android:textSize="16sp"
+            app:fontFamily="@font/roboto_regular" />
+
+    </LinearLayout>
+
+    <!-- Login Form Section -->
+    <androidx.cardview.widget.CardView
+        android:id="@+id/card_login_form"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="24dp"
+        app:cardBackgroundColor="@color/admin_surface"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="4dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/header_section">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="24dp">
+
+            <!-- PIN Input -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/til_pin"
+                style="@style/Widget.CBTProctoring.TextInputLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="24dp"
+                android:hint="@string/admin_pin_hint"
+                app:boxStrokeColor="@color/admin_primary"
+                app:endIconMode="password_toggle"
+                app:startIconDrawable="@drawable/ic_lock"
+                app:startIconTint="@color/admin_primary">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/et_pin"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="numberPassword"
+                    android:maxLength="6"
+                    android:textColor="@color/admin_text"
+                    android:textSize="16sp" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Login Button -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_login"
+                style="@style/Widget.CBTProctoring.Button.Primary"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_marginBottom="16dp"
+                android:text="@string/admin_login_button"
+                android:textSize="16sp"
+                app:backgroundTint="@color/admin_primary"
+                app:cornerRadius="12dp"
+                app:rippleColor="@color/ripple_primary" />
+
+            <!-- Error Message -->
+            <TextView
+                android:id="@+id/tv_error"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:alpha="0"
+                android:gravity="center"
+                android:text="@string/admin_login_error"
+                android:textColor="@color/error"
+                android:textSize="14sp"
+                app:fontFamily="@font/roboto_regular" />
+
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
+    <!-- Footer Section -->
+    <LinearLayout
+        android:id="@+id/footer_section"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="32dp"
+        android:orientation="vertical"
+        android:padding="24dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <!-- Security Info -->
+        <TextView
+            android:id="@+id/tv_security_info"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="16dp"
+            android:text="🔒 Secure Admin Access"
+            android:textColor="@color/admin_text_secondary"
+            android:textSize="14sp"
+            app:fontFamily="@font/roboto_medium" />
+
+        <!-- Version Info -->
+        <TextView
+            android:id="@+id/tv_version_info"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="@string/app_version"
+            android:textColor="@color/admin_text_secondary"
+            android:textSize="12sp"
+            app:fontFamily="@font/roboto_regular" />
+
+    </LinearLayout>
+
+    <!-- Loading Overlay -->
+    <LinearLayout
+        android:id="@+id/loading_overlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:alpha="0"
+        android:background="@color/surface_overlay"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <!-- Loading Progress -->
+        <com.google.android.material.progressindicator.CircularProgressIndicator
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:indeterminate="true"
+            app:indicatorColor="@color/admin_primary"
+            app:indicatorSize="48dp"
+            app:trackColor="@color/gray_200"
+            app:trackThickness="4dp" />
+
+        <!-- Loading Text -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/loading"
+            android:textColor="@color/admin_text"
+            android:textSize="16sp"
+            app:fontFamily="@font/roboto_medium" />
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout> 

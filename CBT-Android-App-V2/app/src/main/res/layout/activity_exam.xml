@@ -1,0 +1,339 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/exam_background"
+    tools:context=".ui.exam.ExamActivity">
+
+    <!-- Status Bar -->
+    <androidx.cardview.widget.CardView
+        android:id="@+id/status_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        app:cardBackgroundColor="@color/exam_surface"
+        app:cardCornerRadius="12dp"
+        app:cardElevation="4dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="12dp">
+
+            <!-- Network Status -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/iv_network_status"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_marginEnd="8dp"
+                    android:contentDescription="Network Status"
+                    android:src="@drawable/ic_network_connected"
+                    app:tint="@color/network_connected" />
+
+                <TextView
+                    android:id="@+id/tv_network_status"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/exam_network_status"
+                    android:textColor="@color/exam_text"
+                    android:textSize="14sp"
+                    app:fontFamily="@font/roboto_medium" />
+
+            </LinearLayout>
+
+            <!-- Proctoring Status -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <View
+                    android:id="@+id/indicator_proctoring"
+                    android:layout_width="8dp"
+                    android:layout_height="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:background="@drawable/bg_proctoring_indicator"
+                    app:proctoringColor="@color/proctoring_active" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/exam_proctoring_active"
+                    android:textColor="@color/exam_text_secondary"
+                    android:textSize="12sp"
+                    app:fontFamily="@font/roboto_regular" />
+
+            </LinearLayout>
+
+            <!-- Timer -->
+            <TextView
+                android:id="@+id/tv_timer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_timer"
+                android:paddingHorizontal="12dp"
+                android:paddingVertical="4dp"
+                android:text="00:00:00"
+                android:textColor="@color/exam_text"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                app:fontFamily="@font/roboto_bold" />
+
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
+    <!-- WebView Container -->
+    <FrameLayout
+        android:id="@+id/webview_container"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/status_bar">
+
+        <!-- WebView -->
+        <WebView
+            android:id="@+id/webview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/exam_background" />
+
+        <!-- Loading Overlay -->
+        <LinearLayout
+            android:id="@+id/loading_overlay"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:alpha="0"
+            android:background="@color/surface_overlay"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <!-- Loading Progress -->
+            <com.google.android.material.progressindicator.CircularProgressIndicator
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:indeterminate="true"
+                app:indicatorColor="@color/exam_accent"
+                app:indicatorSize="48dp"
+                app:trackColor="@color/exam_surface"
+                app:trackThickness="4dp" />
+
+            <!-- Loading Text -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/exam_loading"
+                android:textColor="@color/exam_text"
+                android:textSize="16sp"
+                app:fontFamily="@font/roboto_medium" />
+
+        </LinearLayout>
+
+        <!-- Error Overlay -->
+        <LinearLayout
+            android:id="@+id/error_overlay"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:alpha="0"
+            android:background="@color/surface_overlay"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="32dp"
+            android:visibility="gone">
+
+            <!-- Error Icon -->
+            <ImageView
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:layout_marginBottom="16dp"
+                android:contentDescription="Error Icon"
+                android:src="@drawable/ic_error"
+                app:tint="@color/exam_error" />
+
+            <!-- Error Title -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:text="@string/exam_error_title"
+                android:textColor="@color/exam_text"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                app:fontFamily="@font/roboto_bold" />
+
+            <!-- Error Message -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="24dp"
+                android:gravity="center"
+                android:text="@string/exam_error_message"
+                android:textColor="@color/exam_text_secondary"
+                android:textSize="16sp"
+                app:fontFamily="@font/roboto_regular" />
+
+            <!-- Retry Button -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_retry"
+                style="@style/Widget.CBTProctoring.Button.Primary"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:layout_marginBottom="12dp"
+                android:text="@string/exam_retry_button"
+                app:backgroundTint="@color/exam_accent"
+                app:cornerRadius="12dp" />
+
+            <!-- Exit Button -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_exit_exam"
+                style="@style/Widget.CBTProctoring.Button.Danger"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:text="@string/exam_exit_button"
+                app:backgroundTint="@color/exam_error"
+                app:cornerRadius="12dp" />
+
+        </LinearLayout>
+
+    </FrameLayout>
+
+    <!-- Warning Overlay -->
+    <LinearLayout
+        android:id="@+id/warning_overlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:alpha="0"
+        android:background="@color/surface_overlay"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="32dp"
+        android:visibility="gone">
+
+        <!-- Warning Card -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            app:cardBackgroundColor="@color/exam_surface"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="8dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="24dp">
+
+                <!-- Warning Icon -->
+                <ImageView
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginBottom="16dp"
+                    android:contentDescription="Warning Icon"
+                    android:src="@drawable/ic_warning"
+                    app:tint="@color/exam_warning" />
+
+                <!-- Warning Title -->
+                <TextView
+                    android:id="@+id/tv_warning_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginBottom="8dp"
+                    android:text="@string/security_exit_attempt"
+                    android:textColor="@color/exam_text"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:fontFamily="@font/roboto_bold" />
+
+                <!-- Warning Message -->
+                <TextView
+                    android:id="@+id/tv_warning_message"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginBottom="24dp"
+                    android:gravity="center"
+                    android:text="Attempting to exit the exam is not allowed. This will be recorded as a security violation."
+                    android:textColor="@color/exam_text_secondary"
+                    android:textSize="14sp"
+                    app:fontFamily="@font/roboto_regular" />
+
+                <!-- Warning Actions -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <!-- Continue Button -->
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_continue_exam"
+                        style="@style/Widget.CBTProctoring.Button.Primary"
+                        android:layout_width="wrap_content"
+                        android:layout_height="48dp"
+                        android:layout_marginEnd="8dp"
+                        android:text="Continue Exam"
+                        app:backgroundTint="@color/exam_accent"
+                        app:cornerRadius="12dp" />
+
+                    <!-- Exit Button -->
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_force_exit"
+                        style="@style/Widget.CBTProctoring.Button.Danger"
+                        android:layout_width="wrap_content"
+                        android:layout_height="48dp"
+                        android:layout_marginStart="8dp"
+                        android:text="Exit Exam"
+                        app:backgroundTint="@color/exam_error"
+                        app:cornerRadius="12dp" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+
+    </LinearLayout>
+
+    <!-- Security Violation Counter -->
+    <TextView
+        android:id="@+id/tv_violation_counter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:alpha="0"
+        android:background="@drawable/bg_violation_counter"
+        android:paddingHorizontal="12dp"
+        android:paddingVertical="6dp"
+        android:text="Violations: 0/3"
+        android:textColor="@color/exam_text"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        app:fontFamily="@font/roboto_bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout> 

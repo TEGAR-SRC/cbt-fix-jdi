@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<paths xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- External files directory for proctoring photos -->
+    <external-files-path name="proctoring_photos" path="proctoring/" />
+    
+    <!-- Cache directory for temporary photos -->
+    <cache-path name="temp_photos" path="temp/" />
+    
+    <!-- Internal files directory for app data -->
+    <files-path name="app_data" path="." />
+    
+    <!-- External cache directory -->
+    <external-cache-path name="external_cache" path="." />
+    
+    <!-- External files directory -->
+    <external-files-path name="external_files" path="." />
+    
+    <!-- External media directory -->
+    <external-media-path name="external_media" path="." />
+    
+    <!-- External storage directory -->
+    <external-path name="external_storage" path="." />
+    
+    <!-- Root directory (for debugging only) -->
+    <root-path name="root" path="." />
+</paths> 

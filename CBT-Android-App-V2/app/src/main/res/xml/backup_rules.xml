@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<full-backup-content>
+    <!-- Exclude sensitive data from full backup -->
+    <exclude domain="root" />
+    <exclude domain="file" />
+    <exclude domain="database" />
+    <exclude domain="sharedpref" />
+    <exclude domain="external" />
+    <exclude domain="external-files" />
+    <exclude domain="external-cache" />
+    <exclude domain="external-media" />
+    <exclude domain="external-storage" />
+    
+    <!-- Include only non-sensitive app data -->
+    <include domain="sharedpref" path="app_settings.xml" />
+    <include domain="sharedpref" path="theme_config.xml" />
+    <include domain="sharedpref" path="ui_preferences.xml" />
+</full-backup-content> 

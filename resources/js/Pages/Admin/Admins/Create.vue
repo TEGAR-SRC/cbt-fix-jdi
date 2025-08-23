@@ -65,7 +65,7 @@
 </template>
 
 <script>
-    import LayoutAdmin from '../../../Layouts/Admin.vue';
+    import LayoutAdmin from '@/Layouts/Admin.vue';
     import { Head, Link, router } from '@inertiajs/vue3';
     import { reactive } from 'vue';
     import Swal from 'sweetalert2';

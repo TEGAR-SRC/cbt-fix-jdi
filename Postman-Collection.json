@@ -1,0 +1,758 @@
+{
+  "info": {
+    "name": "CBT Proctoring API",
+    "description": "Complete API collection for CBT Proctoring Android App integration",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "version": "1.0.0"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8000/api",
+      "type": "string"
+    },
+    {
+      "key": "api_key",
+      "value": "default_cbt_api_key",
+      "type": "string"
+    },
+    {
+      "key": "admin_pin",
+      "value": "1234",
+      "type": "string"
+    },
+    {
+      "key": "session_id",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "1. Health & Utility",
+      "item": [
+        {
+          "name": "Health Check",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/health",
+              "host": ["{{base_url}}"],
+              "path": ["health"]
+            }
+          }
+        },
+        {
+          "name": "Ping Test",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/ping",
+              "host": ["{{base_url}}"],
+              "path": ["ping"]
+            }
+          }
+        },
+        {
+          "name": "Test Database Connection",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/test/database",
+              "host": ["{{base_url}}"],
+              "path": ["test", "database"]
+            }
+          }
+        },
+        {
+          "name": "Test Cache",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/test/cache",
+              "host": ["{{base_url}}"],
+              "path": ["test", "cache"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "2. Configuration",
+      "item": [
+        {
+          "name": "Get CBT URL",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-API-Key",
+                "value": "{{api_key}}",
+                "type": "text"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/config/cbt-url",
+              "host": ["{{base_url}}"],
+              "path": ["config", "cbt-url"]
+            }
+          }
+        },
+        {
+          "name": "Update CBT URL",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "X-API-Key",
+                "value": "{{api_key}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"cbt_url\": \"https://new-cbt.edupus.id\",\n  \"admin_pin\": \"{{admin_pin}}\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/config/cbt-url",
+              "host": ["{{base_url}}"],
+              "path": ["config", "cbt-url"]
+            }
+          }
+        },
+        {
+          "name": "Verify Admin PIN",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "X-API-Key",
+                "value": "{{api_key}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"admin_pin\": \"{{admin_pin}}\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/config/admin-pin/verify",
+              "host": ["{{base_url}}"],
+              "path": ["config", "admin-pin", "verify"]
+            }
+          }
+        },
+        {
+          "name": "Update Admin PIN",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "X-API-Key",
+                "value": "{{api_key}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"current_pin\": \"{{admin_pin}}\",\n  \"new_pin\": \"5678\",\n  \"confirm_pin\": \"5678\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/config/admin-pin/update",
+              "host": ["{{base_url}}"],
+              "path": ["config", "admin-pin", "update"]
+            }
+          }
+        },
+        {
+          "name": "Get App Configuration",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-API-Key",
+                "value": "{{api_key}}",
+                "type": "text"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/config/app",
+              "host": ["{{base_url}}"],
+              "path": ["config", "app"]
+            }
+          }
+        },
+        {
+          "name": "Reset Configuration",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "X-API-Key",
+                "value": "{{api_key}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"admin_pin\": \"{{admin_pin}}\",\n  \"confirm_reset\": true\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/config/reset",
+              "host": ["{{base_url}}"],
+              "path": ["config", "reset"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "3. Proctoring Session",
+      "item": [
+        {
+          "name": "Start Session",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (responseCode.code === 201) {",
+                  "    var jsonData = pm.response.json();",
+                  "    if (jsonData.success && jsonData.data.session_id) {",
+                  "        pm.collectionVariables.set('session_id', jsonData.data.session_id);",
+                  "        console.log('Session ID saved: ' + jsonData.data.session_id);",
+                  "    }",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "X-API-Key",
+                "value": "{{api_key}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"participant_id\": \"student_123\",\n  \"device_id\": \"android_device_abc123\",\n  \"device_model\": \"Samsung Galaxy S21\",\n  \"android_version\": \"12\",\n  \"app_version\": \"1.0.0\",\n  \"device_info\": {\n    \"manufacturer\": \"Samsung\",\n    \"model\": \"SM-G991B\",\n    \"android_version\": \"12\",\n    \"api_level\": 31,\n    \"screen_resolution\": \"1080x2400\",\n    \"memory_total\": \"8GB\",\n    \"storage_available\": \"45GB\"\n  }\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/proctoring/session/start",
+              "host": ["{{base_url}}"],
+              "path": ["proctoring", "session", "start"]
+            }
+          }
+        },
+        {
+          "name": "End Session",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "X-API-Key",
+                "value": "{{api_key}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"completed\",\n  \"notes\": \"Exam completed successfully\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/proctoring/session/{{session_id}}/end",
+              "host": ["{{base_url}}"],
+              "path": ["proctoring", "session", "{{session_id}}", "end"]
+            }
+          }
+        },
+        {
+          "name": "Get Session Summary",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-API-Key",
+                "value": "{{api_key}}",
+                "type": "text"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/proctoring/session/{{session_id}}/summary",
+              "host": ["{{base_url}}"],
+              "path": ["proctoring", "session", "{{session_id}}", "summary"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "4. Activity Logging",
+      "item": [
+        {
+          "name": "Log App Launch",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "X-API-Key",
+                "value": "{{api_key}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"session_id\": \"{{session_id}}\",\n  \"activity_type\": \"app_launch\",\n  \"activity_subtype\": \"normal_launch\",\n  \"timestamp\": \"2024-01-01T10:00:00Z\",\n  \"description\": \"CBT app launched by participant\",\n  \"severity\": \"info\",\n  \"is_violation\": false,\n  \"metadata\": {\n    \"app_version\": \"1.0.0\",\n    \"launch_time_ms\": 2500,\n    \"device_orientation\": \"portrait\"\n  }\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/proctoring/activity-log",
+              "host": ["{{base_url}}"],
+              "path": ["proctoring", "activity-log"]
+            }
+          }
+        },
+        {
+          "name": "Log WebView Load",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "X-API-Key",
+                "value": "{{api_key}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"session_id\": \"{{session_id}}\",\n  \"activity_type\": \"webview_load\",\n  \"timestamp\": \"2024-01-01T10:02:00Z\",\n  \"description\": \"CBT page loaded in WebView\",\n  \"severity\": \"info\",\n  \"metadata\": {\n    \"url_loaded\": \"https://cbt.edupus.id/exam/123\",\n    \"load_time_ms\": 3200,\n    \"user_agent\": \"CBTProctoring/1.0\"\n  }\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/proctoring/activity-log",
+              "host": ["{{base_url}}"],
+              "path": ["proctoring", "activity-log"]
+            }
+          }
+        },
+        {
+          "name": "Log App Pause",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "X-API-Key",
+                "value": "{{api_key}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"session_id\": \"{{session_id}}\",\n  \"activity_type\": \"app_pause\",\n  \"timestamp\": \"2024-01-01T10:15:00Z\",\n  \"description\": \"App paused by system\",\n  \"severity\": \"warning\",\n  \"is_violation\": true,\n  \"metadata\": {\n    \"pause_reason\": \"incoming_call\",\n    \"duration_seconds\": 45\n  }\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/proctoring/activity-log",
+              "host": ["{{base_url}}"],
+              "path": ["proctoring", "activity-log"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "5. Photo Upload",
+      "item": [
+        {
+          "name": "Upload Proctoring Photo",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "X-API-Key",
+                "value": "{{api_key}}",
+                "type": "text"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "session_id",
+                  "value": "{{session_id}}",
+                  "type": "text"
+                },
+                {
+                  "key": "captured_at",
+                  "value": "2024-01-01T10:05:00Z",
+                  "type": "text"
+                },
+                {
+                  "key": "camera_metadata",
+                  "value": "{\"camera_facing\":\"front\",\"resolution\":\"1920x1080\",\"flash_used\":false}",
+                  "type": "text"
+                },
+                {
+                  "key": "notes",
+                  "value": "Periodic proctoring photo",
+                  "type": "text"
+                },
+                {
+                  "key": "photo",
+                  "type": "file",
+                  "description": "Select a photo file (JPEG/PNG, max 2MB)"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/proctoring/photo",
+              "host": ["{{base_url}}"],
+              "path": ["proctoring", "photo"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "6. Violation Reporting",
+      "item": [
+        {
+          "name": "Report App Exit Attempt",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "X-API-Key",
+                "value": "{{api_key}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"session_id\": \"{{session_id}}\",\n  \"violation_type\": \"app_exit_attempt\",\n  \"violation_category\": \"behavior\",\n  \"severity\": \"high\",\n  \"description\": \"User attempted to exit application during exam\",\n  \"evidence\": {\n    \"detection_method\": \"system_api\",\n    \"detection_time\": \"2024-01-01T10:15:00Z\",\n    \"device_state\": \"active\",\n    \"additional_info\": \"Back button pressed multiple times\"\n  },\n  \"action_taken\": \"Warning displayed to user\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/proctoring/violation",
+              "host": ["{{base_url}}"],
+              "path": ["proctoring", "violation"]
+            }
+          }
+        },
+        {
+          "name": "Report Screenshot Attempt",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "X-API-Key",
+                "value": "{{api_key}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"session_id\": \"{{session_id}}\",\n  \"violation_type\": \"screenshot_attempt\",\n  \"violation_category\": \"security\",\n  \"severity\": \"critical\",\n  \"description\": \"User attempted to take screenshot\",\n  \"evidence\": {\n    \"detection_method\": \"flag_secure\",\n    \"detection_time\": \"2024-01-01T10:20:00Z\",\n    \"blocked_by\": \"android_system\"\n  },\n  \"action_taken\": \"Screenshot blocked, violation logged\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/proctoring/violation",
+              "host": ["{{base_url}}"],
+              "path": ["proctoring", "violation"]
+            }
+          }
+        },
+        {
+          "name": "Report Root Detection",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "X-API-Key",
+                "value": "{{api_key}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"session_id\": \"{{session_id}}\",\n  \"violation_type\": \"root_detected\",\n  \"violation_category\": \"device\",\n  \"severity\": \"critical\",\n  \"description\": \"Rooted device detected\",\n  \"evidence\": {\n    \"detection_method\": \"root_checker\",\n    \"detection_time\": \"2024-01-01T10:00:30Z\",\n    \"root_indicators\": [\"su_binary\", \"superuser_app\", \"build_tags\"]\n  },\n  \"action_taken\": \"Exam terminated immediately\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/proctoring/violation",
+              "host": ["{{base_url}}"],
+              "path": ["proctoring", "violation"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "7. Network Status",
+      "item": [
+        {
+          "name": "Log Network Connected",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "X-API-Key",
+                "value": "{{api_key}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"session_id\": \"{{session_id}}\",\n  \"connection_status\": \"connected\",\n  \"network_type\": \"WiFi\",\n  \"additional_info\": \"Signal strength: -45 dBm, Bandwidth: 50 Mbps\",\n  \"exam_paused\": false\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/proctoring/network-status",
+              "host": ["{{base_url}}"],
+              "path": ["proctoring", "network-status"]
+            }
+          }
+        },
+        {
+          "name": "Log Network Disconnected",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "X-API-Key",
+                "value": "{{api_key}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"session_id\": \"{{session_id}}\",\n  \"connection_status\": \"disconnected\",\n  \"network_type\": \"WiFi\",\n  \"duration_seconds\": 120,\n  \"additional_info\": \"WiFi connection lost\",\n  \"exam_paused\": true\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/proctoring/network-status",
+              "host": ["{{base_url}}"],
+              "path": ["proctoring", "network-status"]
+            }
+          }
+        },
+        {
+          "name": "Log Network Poor Quality",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "X-API-Key",
+                "value": "{{api_key}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"session_id\": \"{{session_id}}\",\n  \"connection_status\": \"poor\",\n  \"network_type\": \"Mobile\",\n  \"additional_info\": \"Signal strength: -85 dBm, High latency detected\",\n  \"exam_paused\": false\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/proctoring/network-status",
+              "host": ["{{base_url}}"],
+              "path": ["proctoring", "network-status"]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

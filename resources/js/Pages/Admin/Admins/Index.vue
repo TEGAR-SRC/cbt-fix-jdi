@@ -65,7 +65,7 @@
 </template>
 
 <script>
-    import LayoutAdmin from '../../../Layouts/Admin.vue';
+    import LayoutAdmin from '@/Layouts/Admin.vue';
     import Pagination from '../../../Components/Pagination.vue';
     import { Head, Link, router } from '@inertiajs/vue3';
     import { ref } from 'vue';

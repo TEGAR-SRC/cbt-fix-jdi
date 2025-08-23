@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Primary Colors -->
+    <color name="primary">#2196F3</color>
+    <color name="primary_dark">#1976D2</color>
+    <color name="primary_light">#BBDEFB</color>
+    <color name="primary_variant">#1565C0</color>
+    
+    <!-- Secondary Colors -->
+    <color name="secondary">#FF9800</color>
+    <color name="secondary_dark">#F57C00</color>
+    <color name="secondary_light">#FFE0B2</color>
+    <color name="secondary_variant">#E65100</color>
+    
+    <!-- Neutral Colors -->
+    <color name="black">#000000</color>
+    <color name="white">#FFFFFF</color>
+    <color name="transparent">#00000000</color>
+    
+    <!-- Gray Scale -->
+    <color name="gray_50">#FAFAFA</color>
+    <color name="gray_100">#F5F5F5</color>
+    <color name="gray_200">#EEEEEE</color>
+    <color name="gray_300">#E0E0E0</color>
+    <color name="gray_400">#BDBDBD</color>
+    <color name="gray_500">#9E9E9E</color>
+    <color name="gray_600">#757575</color>
+    <color name="gray_700">#616161</color>
+    <color name="gray_800">#424242</color>
+    <color name="gray_900">#212121</color>
+    
+    <!-- Text Colors -->
+    <color name="text_primary">#212121</color>
+    <color name="text_secondary">#757575</color>
+    <color name="text_disabled">#BDBDBD</color>
+    <color name="text_white">#FFFFFF</color>
+    <color name="text_black">#000000</color>
+    
+    <!-- Status Colors -->
+    <color name="success">#4CAF50</color>
+    <color name="success_dark">#388E3C</color>
+    <color name="success_light">#C8E6C9</color>
+    
+    <color name="warning">#FF9800</color>
+    <color name="warning_dark">#F57C00</color>
+    <color name="warning_light">#FFE0B2</color>
+    
+    <color name="error">#F44336</color>
+    <color name="error_dark">#D32F2F</color>
+    <color name="error_light">#FFCDD2</color>
+    
+    <color name="info">#2196F3</color>
+    <color name="info_dark">#1976D2</color>
+    <color name="info_light">#BBDEFB</color>
+    
+    <!-- Background Colors -->
+    <color name="background_primary">#FFFFFF</color>
+    <color name="background_secondary">#F5F5F5</color>
+    <color name="background_surface">#FFFFFF</color>
+    <color name="background_exam">#000000</color>
+    <color name="background_splash">#2196F3</color>
+    
+    <!-- Surface Colors -->
+    <color name="surface_primary">#FFFFFF</color>
+    <color name="surface_secondary">#F5F5F5</color>
+    <color name="surface_elevated">#FFFFFF</color>
+    <color name="surface_overlay">#80000000</color>
+    
+    <!-- Splash Screen Colors -->
+    <color name="splash_background">#2196F3</color>
+    <color name="splash_text">#FFFFFF</color>
+    <color name="splash_accent">#FF9800</color>
+    
+    <!-- Admin Panel Colors -->
+    <color name="admin_background">#FFFFFF</color>
+    <color name="admin_surface">#F5F5F5</color>
+    <color name="admin_primary">#2196F3</color>
+    <color name="admin_secondary">#FF9800</color>
+    <color name="admin_text">#212121</color>
+    <color name="admin_text_secondary">#757575</color>
+    
+    <!-- Exam Colors -->
+    <color name="exam_background">#000000</color>
+    <color name="exam_surface">#1A1A1A</color>
+    <color name="exam_text">#FFFFFF</color>
+    <color name="exam_text_secondary">#BDBDBD</color>
+    <color name="exam_accent">#2196F3</color>
+    <color name="exam_warning">#FF9800</color>
+    <color name="exam_error">#F44336</color>
+    
+    <!-- Proctoring Colors -->
+    <color name="proctoring_active">#4CAF50</color>
+    <color name="proctoring_inactive">#F44336</color>
+    <color name="proctoring_warning">#FF9800</color>
+    <color name="proctoring_background">#1A1A1A</color>
+    
+    <!-- Network Status Colors -->
+    <color name="network_connected">#4CAF50</color>
+    <color name="network_disconnected">#F44336</color>
+    <color name="network_checking">#FF9800</color>
+    <color name="network_wifi">#2196F3</color>
+    <color name="network_mobile">#9C27B0</color>
+    
+    <!-- Security Colors -->
+    <color name="security_safe">#4CAF50</color>
+    <color name="security_warning">#FF9800</color>
+    <color name="security_danger">#F44336</color>
+    <color name="security_background">#1A1A1A</color>
+    
+    <!-- Button Colors -->
+    <color name="button_primary">#2196F3</color>
+    <color name="button_primary_pressed">#1976D2</color>
+    <color name="button_secondary">#FF9800</color>
+    <color name="button_secondary_pressed">#F57C00</color>
+    <color name="button_danger">#F44336</color>
+    <color name="button_danger_pressed">#D32F2F</color>
+    <color name="button_disabled">#E0E0E0</color>
+    <color name="button_text_primary">#FFFFFF</color>
+    <color name="button_text_secondary">#FFFFFF</color>
+    <color name="button_text_disabled">#BDBDBD</color>
+    
+    <!-- Input Colors -->
+    <color name="input_background">#FFFFFF</color>
+    <color name="input_border">#E0E0E0</color>
+    <color name="input_border_focused">#2196F3</color>
+    <color name="input_border_error">#F44336</color>
+    <color name="input_text">#212121</color>
+    <color name="input_hint">#757575</color>
+    <color name="input_disabled">#F5F5F5</color>
+    
+    <!-- Card Colors -->
+    <color name="card_background">#FFFFFF</color>
+    <color name="card_elevation">#1A000000</color>
+    <color name="card_border">#E0E0E0</color>
+    <color name="card_text">#212121</color>
+    <color name="card_text_secondary">#757575</color>
+    
+    <!-- Divider Colors -->
+    <color name="divider_primary">#E0E0E0</color>
+    <color name="divider_secondary">#F5F5F5</color>
+    <color name="divider_dark">#424242</color>
+    
+    <!-- Shadow Colors -->
+    <color name="shadow_light">#1A000000</color>
+    <color name="shadow_medium">#33000000</color>
+    <color name="shadow_dark">#4D000000</color>
+    
+    <!-- Ripple Colors -->
+    <color name="ripple_primary">#1A2196F3</color>
+    <color name="ripple_secondary">#1AFF9800</color>
+    <color name="ripple_dark">#1A000000</color>
+    <color name="ripple_light">#1AFFFFFF</color>
+    
+    <!-- Animation Colors -->
+    <color name="animation_primary">#2196F3</color>
+    <color name="animation_secondary">#FF9800</color>
+    <color name="animation_success">#4CAF50</color>
+    <color name="animation_error">#F44336</color>
+    
+    <!-- Theme Colors (for dynamic theming) -->
+    <color name="theme_primary">#2196F3</color>
+    <color name="theme_primary_dark">#1976D2</color>
+    <color name="theme_primary_light">#BBDEFB</color>
+    <color name="theme_accent">#FF9800</color>
+    <color name="theme_accent_dark">#F57C00</color>
+    <color name="theme_accent_light">#FFE0B2</color>
+    <color name="theme_background">#FFFFFF</color>
+    <color name="theme_surface">#F5F5F5</color>
+    <color name="theme_text">#212121</color>
+    <color name="theme_text_secondary">#757575</color>
+    
+</resources> 

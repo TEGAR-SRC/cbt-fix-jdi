@@ -1,0 +1,470 @@
+<?xml version="1.0" encoding="utf-8"?>
+<device-admin xmlns:android="http://schemas.android.com/apk/res/android">
+    <uses-policies>
+        <!-- Password policies -->
+        <limit-password />
+        <watch-login />
+        <reset-password />
+        <force-lock />
+        
+        <!-- Lock screen features -->
+        <disable-keyguard-features />
+        
+        <!-- Wipe data -->
+        <wipe-data />
+        
+        <!-- Expire password -->
+        <expire-password />
+        
+        <!-- Encrypted storage -->
+        <encrypted-storage />
+        
+        <!-- Disable camera -->
+        <disable-camera />
+        
+        <!-- Disable screen capture -->
+        <disable-screen-capture />
+        
+        <!-- Disable clipboard -->
+        <disable-clipboard />
+        
+        <!-- Disable status bar -->
+        <disable-status-bar />
+        
+        <!-- Disable safe boot -->
+        <disable-safe-boot />
+        
+        <!-- Disable factory reset -->
+        <disable-factory-reset />
+        
+        <!-- Disable add user -->
+        <disable-add-user />
+        
+        <!-- Disable remove user -->
+        <disable-remove-user />
+        
+        <!-- Disable switch user -->
+        <disable-switch-user />
+        
+        <!-- Disable uninstall apps -->
+        <disable-uninstall-apps />
+        
+        <!-- Disable install apps -->
+        <disable-install-apps />
+        
+        <!-- Disable app widgets -->
+        <disable-app-widgets />
+        
+        <!-- Disable outgoing calls -->
+        <disable-outgoing-calls />
+        
+        <!-- Disable SMS -->
+        <disable-sms />
+        
+        <!-- Disable outgoing beam -->
+        <disable-outgoing-beam />
+        
+        <!-- Disable Bluetooth -->
+        <disable-bluetooth />
+        
+        <!-- Disable WiFi -->
+        <disable-wifi />
+        
+        <!-- Disable WiFi tethering -->
+        <disable-wifi-tethering />
+        
+        <!-- Disable USB storage -->
+        <disable-usb-storage />
+        
+        <!-- Disable external storage -->
+        <disable-external-storage />
+        
+        <!-- Disable NFC -->
+        <disable-nfc />
+        
+        <!-- Disable data roaming -->
+        <disable-data-roaming />
+        
+        <!-- Disable mobile data -->
+        <disable-mobile-data />
+        
+        <!-- Disable voice dialing -->
+        <disable-voice-dialing />
+        
+        <!-- Disable volume adjustment -->
+        <disable-volume-adjustment />
+        
+        <!-- Disable microphone -->
+        <disable-microphone />
+        
+        <!-- Disable speakerphone -->
+        <disable-speakerphone />
+        
+        <!-- Disable auto sync -->
+        <disable-auto-sync />
+        
+        <!-- Disable network location -->
+        <disable-network-location />
+        
+        <!-- Disable GPS location -->
+        <disable-gps-location />
+        
+        <!-- Disable wallpaper -->
+        <disable-wallpaper />
+        
+        <!-- Disable status bar expansion -->
+        <disable-status-bar-expansion />
+        
+        <!-- Disable notification access -->
+        <disable-notification-access />
+        
+        <!-- Disable accessibility services -->
+        <disable-accessibility-services />
+        
+        <!-- Disable input methods -->
+        <disable-input-methods />
+        
+        <!-- Disable VPN -->
+        <disable-vpn />
+        
+        <!-- Disable adb -->
+        <disable-adb />
+        
+        <!-- Disable USB debugging -->
+        <disable-usb-debugging />
+        
+        <!-- Disable developer options -->
+        <disable-developer-options />
+        
+        <!-- Disable mock location -->
+        <disable-mock-location />
+        
+        <!-- Disable unknown sources -->
+        <disable-unknown-sources />
+        
+        <!-- Disable verify apps -->
+        <disable-verify-apps />
+        
+        <!-- Disable app verification -->
+        <disable-app-verification />
+        
+        <!-- Disable package verification -->
+        <disable-package-verification />
+        
+        <!-- Disable system update -->
+        <disable-system-update />
+        
+        <!-- Disable factory reset protection -->
+        <disable-factory-reset-protection />
+        
+        <!-- Disable account management -->
+        <disable-account-management />
+        
+        <!-- Disable backup -->
+        <disable-backup />
+        
+        <!-- Disable restore -->
+        <disable-restore />
+        
+        <!-- Disable cloud backup -->
+        <disable-cloud-backup />
+        
+        <!-- Disable device transfer -->
+        <disable-device-transfer />
+        
+        <!-- Disable personal usage -->
+        <disable-personal-usage />
+        
+        <!-- Disable screen timeout -->
+        <disable-screen-timeout />
+        
+        <!-- Disable lock screen -->
+        <disable-lock-screen />
+        
+        <!-- Disable home button -->
+        <disable-home-button />
+        
+        <!-- Disable recent apps -->
+        <disable-recent-apps />
+        
+        <!-- Disable back button -->
+        <disable-back-button />
+        
+        <!-- Disable menu button -->
+        <disable-menu-button />
+        
+        <!-- Disable search button -->
+        <disable-search-button />
+        
+        <!-- Disable volume buttons -->
+        <disable-volume-buttons />
+        
+        <!-- Disable power button -->
+        <disable-power-button />
+        
+        <!-- Disable hardware keys -->
+        <disable-hardware-keys />
+        
+        <!-- Disable soft keyboard -->
+        <disable-soft-keyboard />
+        
+        <!-- Disable voice input -->
+        <disable-voice-input />
+        
+        <!-- Disable gesture navigation -->
+        <disable-gesture-navigation />
+        
+        <!-- Disable split screen -->
+        <disable-split-screen />
+        
+        <!-- Disable picture-in-picture -->
+        <disable-picture-in-picture />
+        
+        <!-- Disable floating windows -->
+        <disable-floating-windows />
+        
+        <!-- Disable multi-window -->
+        <disable-multi-window />
+        
+        <!-- Disable freeform windows -->
+        <disable-freeform-windows />
+        
+        <!-- Disable task switching -->
+        <disable-task-switching />
+        
+        <!-- Disable app switching -->
+        <disable-app-switching />
+        
+        <!-- Disable recent tasks -->
+        <disable-recent-tasks />
+        
+        <!-- Disable task manager -->
+        <disable-task-manager />
+        
+        <!-- Disable process manager -->
+        <disable-process-manager />
+        
+        <!-- Disable activity manager -->
+        <disable-activity-manager />
+        
+        <!-- Disable package manager -->
+        <disable-package-manager />
+        
+        <!-- Disable settings -->
+        <disable-settings />
+        
+        <!-- Disable launcher -->
+        <disable-launcher />
+        
+        <!-- Disable home screen -->
+        <disable-home-screen />
+        
+        <!-- Disable app drawer -->
+        <disable-app-drawer />
+        
+        <!-- Disable widgets -->
+        <disable-widgets />
+        
+        <!-- Disable shortcuts -->
+        <disable-shortcuts />
+        
+        <!-- Disable folders -->
+        <disable-folders />
+        
+        <!-- Disable app groups -->
+        <disable-app-groups />
+        
+        <!-- Disable app categories -->
+        <disable-app-categories />
+        
+        <!-- Disable app search -->
+        <disable-app-search />
+        
+        <!-- Disable global search -->
+        <disable-global-search />
+        
+        <!-- Disable voice search -->
+        <disable-voice-search />
+        
+        <!-- Disable assistant -->
+        <disable-assistant />
+        
+        <!-- Disable Google Now -->
+        <disable-google-now />
+        
+        <!-- Disable Google Assistant -->
+        <disable-google-assistant />
+        
+        <!-- Disable Bixby -->
+        <disable-bixby />
+        
+        <!-- Disable Siri -->
+        <disable-siri />
+        
+        <!-- Disable Cortana -->
+        <disable-cortana />
+        
+        <!-- Disable Alexa -->
+        <disable-alexa />
+        
+        <!-- Disable other assistants -->
+        <disable-other-assistants />
+        
+        <!-- Disable voice commands -->
+        <disable-voice-commands />
+        
+        <!-- Disable voice recognition -->
+        <disable-voice-recognition />
+        
+        <!-- Disable speech recognition -->
+        <disable-speech-recognition />
+        
+        <!-- Disable text-to-speech -->
+        <disable-text-to-speech />
+        
+        <!-- Disable speech-to-text -->
+        <disable-speech-to-text />
+        
+        <!-- Disable voice input methods -->
+        <disable-voice-input-methods />
+        
+        <!-- Disable handwriting input -->
+        <disable-handwriting-input />
+        
+        <!-- Disable gesture input -->
+        <disable-gesture-input />
+        
+        <!-- Disable motion input -->
+        <disable-motion-input />
+        
+        <!-- Disable sensor input -->
+        <disable-sensor-input />
+        
+        <!-- Disable biometric input -->
+        <disable-biometric-input />
+        
+        <!-- Disable fingerprint -->
+        <disable-fingerprint />
+        
+        <!-- Disable face recognition -->
+        <disable-face-recognition />
+        
+        <!-- Disable iris recognition -->
+        <disable-iris-recognition />
+        
+        <!-- Disable voice recognition -->
+        <disable-voice-recognition />
+        
+        <!-- Disable other biometrics -->
+        <disable-other-biometrics />
+        
+        <!-- Disable accessibility features -->
+        <disable-accessibility-features />
+        
+        <!-- Disable screen reader -->
+        <disable-screen-reader />
+        
+        <!-- Disable magnification -->
+        <disable-magnification />
+        
+        <!-- Disable high contrast -->
+        <disable-high-contrast />
+        
+        <!-- Disable color inversion -->
+        <disable-color-inversion />
+        
+        <!-- Disable color correction -->
+        <disable-color-correction />
+        
+        <!-- Disable font scaling -->
+        <disable-font-scaling />
+        
+        <!-- Disable bold text -->
+        <disable-bold-text />
+        
+        <!-- Disable large text -->
+        <disable-large-text />
+        
+        <!-- Disable animation scaling -->
+        <disable-animation-scaling />
+        
+        <!-- Disable transition scaling -->
+        <disable-transition-scaling />
+        
+        <!-- Disable window animation scaling -->
+        <disable-window-animation-scaling />
+        
+        <!-- Disable animator duration scaling -->
+        <disable-animator-duration-scaling />
+        
+        <!-- Disable hardware acceleration -->
+        <disable-hardware-acceleration />
+        
+        <!-- Disable GPU acceleration -->
+        <disable-gpu-acceleration />
+        
+        <!-- Disable OpenGL acceleration -->
+        <disable-opengl-acceleration />
+        
+        <!-- Disable Vulkan acceleration -->
+        <disable-vulkan-acceleration />
+        
+        <!-- Disable other accelerations -->
+        <disable-other-accelerations />
+        
+        <!-- Disable performance modes -->
+        <disable-performance-modes />
+        
+        <!-- Disable power saving modes -->
+        <disable-power-saving-modes />
+        
+        <!-- Disable battery optimization -->
+        <disable-battery-optimization />
+        
+        <!-- Disable adaptive battery -->
+        <disable-adaptive-battery />
+        
+        <!-- Disable adaptive brightness -->
+        <disable-adaptive-brightness />
+        
+        <!-- Disable auto brightness -->
+        <disable-auto-brightness />
+        
+        <!-- Disable night mode -->
+        <disable-night-mode />
+        
+        <!-- Disable dark mode -->
+        <disable-dark-mode />
+        
+        <!-- Disable light mode -->
+        <disable-light-mode />
+        
+        <!-- Disable system themes -->
+        <disable-system-themes />
+        
+        <!-- Disable custom themes -->
+        <disable-custom-themes />
+        
+        <!-- Disable theme customization -->
+        <disable-theme-customization />
+        
+        <!-- Disable wallpaper customization -->
+        <disable-wallpaper-customization />
+        
+        <!-- Disable icon customization -->
+        <disable-icon-customization />
+        
+        <!-- Disable font customization -->
+        <disable-font-customization />
+        
+        <!-- Disable color customization -->
+        <disable-color-customization />
+        
+        <!-- Disable layout customization -->
+        <disable-layout-customization />
+        
+        <!-- Disable other customizations -->
+        <disable-other-customizations />
+        
+    </uses-policies>
+</device-admin> 
