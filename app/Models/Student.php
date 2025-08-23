@@ -29,4 +29,12 @@ class Student extends Authenticatable
     {
         return $this->belongsTo(Classroom::class);
     }
+
+    /**
+     * guardians (orang tua)
+     */
+    public function guardians()
+    {
+        return $this->belongsToMany(\App\Models\Guardian::class, 'guardian_student');
+    }
 }

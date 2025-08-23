@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Imports\QuestionsImport;
+use App\Exports\QuestionsExport;
 
 class ExamController extends Controller
 {
@@ -50,8 +51,9 @@ class ExamController extends Controller
             'random_answer' => 'required|in:Y,N',
             'show_answer' => 'required|in:Y,N',
         ]);
-        Exam::create($validated);
-        return redirect()->route('teacher.exams.index');
+    Exam::create($validated);
+    $prefix = str_starts_with($request->path(), 'operator/') ? 'operator' : 'teacher';
+    return redirect()->route($prefix.'.exams.index');
     }
 
     public function show(Request $request, Exam $exam)
@@ -89,7 +91,8 @@ class ExamController extends Controller
             'show_answer' => 'required|in:Y,N',
         ]);
         $exam->update($validated);
-        return redirect()->route('teacher.exams.index');
+    $prefix = str_starts_with($request->path(), 'operator/') ? 'operator' : 'teacher';
+    return redirect()->route($prefix.'.exams.index');
     }
 
     public function destroy(Request $request, Exam $exam)
@@ -137,7 +140,8 @@ class ExamController extends Controller
             'option_5' => $request->option_5,
             'answer'   => $request->answer,
         ]);
-        return redirect()->route('teacher.exams.show', $exam->id);
+    $prefix = str_starts_with($request->path(), 'operator/') ? 'operator' : 'teacher';
+    return redirect()->route($prefix.'.exams.show', $exam->id);
     }
 
     public function editQuestion(Request $request, Exam $exam, Question $question)
@@ -184,7 +188,8 @@ class ExamController extends Controller
         }
 
         $question->update($data);
-        return redirect()->route('teacher.exams.show', $exam->id);
+    $prefix = str_starts_with($request->path(), 'operator/') ? 'operator' : 'teacher';
+    return redirect()->route($prefix.'.exams.show', $exam->id);
     }
 
     public function destroyQuestion(Request $request, Exam $exam, Question $question)
@@ -193,7 +198,8 @@ class ExamController extends Controller
     if ($question->audio_path) { \Storage::disk('public')->delete($question->audio_path); }
     if ($question->video_path) { \Storage::disk('public')->delete($question->video_path); }
     $question->delete();
-        return redirect()->route('teacher.exams.show', $exam->id);
+    $prefix = str_starts_with($request->path(), 'operator/') ? 'operator' : 'teacher';
+    return redirect()->route($prefix.'.exams.show', $exam->id);
     }
 
     // Import questions (Excel) similar to admin
@@ -206,6 +212,13 @@ class ExamController extends Controller
     {
         $request->validate(['file' => 'required|mimes:csv,xls,xlsx']);
         Excel::import(new QuestionsImport(), $request->file('file'));
-        return redirect()->route('teacher.exams.show', $exam->id);
+    $prefix = str_starts_with($request->path(), 'operator/') ? 'operator' : 'teacher';
+    return redirect()->route($prefix.'.exams.show', $exam->id);
+    }
+
+    public function exportQuestions(Request $request, Exam $exam)
+    {
+        $questions = $exam->questions()->get();
+        return Excel::download(new QuestionsExport($questions), 'questions-exam-'.$exam->id.'.xlsx');
     }
 }

@@ -1,5 +1,5 @@
 <template>
-  <TeacherLayout>
+  <StaffLayout>
     <div class="container-fluid py-4">
       <h4 class="fw-semibold mb-3">Buat Ujian</h4>
       <form @submit.prevent="submit">
@@ -52,23 +52,29 @@
         </div>
         <div class="mt-4">
           <button class="btn btn-primary">Simpan</button>
-          <Link href="/teacher/exams" class="btn btn-light ms-2">Batal</Link>
+          <Link :href="`${basePath}/exams`" class="btn btn-light ms-2">Batal</Link>
         </div>
       </form>
     </div>
-  </TeacherLayout>
+  </StaffLayout>
 </template>
 <script>
 import { Link, router } from '@inertiajs/vue3'
-import TeacherLayout from '../../../Layouts/Teacher.vue'
+import StaffLayout from '../../../Layouts/Staff.vue'
 export default {
-  components: { TeacherLayout, Link },
+  components: { StaffLayout, Link },
   props: { classrooms: Array, lessons: Array },
   data(){
     return { form: { title:'', lesson_id:'', classroom_id:'', duration:60, description:'', random_question:'Y', random_answer:'Y', show_answer:'N' } }
   },
+  computed: {
+    basePath(){
+      const seg = (this.$page?.url || window.location.pathname).split('/')[1] || 'teacher'
+      return `/${seg}`
+    }
+  },
   methods:{
-    submit(){ router.post('/teacher/exams', this.form) }
+    submit(){ router.post(`${this.basePath}/exams`, this.form) }
   }
 }
 </script>

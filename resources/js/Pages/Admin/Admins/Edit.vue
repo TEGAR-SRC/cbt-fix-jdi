@@ -40,6 +40,19 @@
                                 <label>Konfirmasi Password</label> 
                                 <input type="password" class="form-control" placeholder="Ulangi Password" v-model="form.password_confirmation">
                             </div>
+
+                            <div class="mb-4">
+                                <label>Role</label>
+                                <select class="form-control" v-model="form.role">
+                                    <option value="admin">Admin</option>
+                                    <option value="operator">Operator</option>
+                                    <option value="teacher">Guru</option>
+                                    <option value="dinas">Dinas Pendidikan</option>
+                                </select>
+                                <div v-if="errors.role" class="alert alert-danger mt-2">
+                                    {{ errors.role }}
+                                </div>
+                            </div>
                             
                             <button type="submit" class="btn btn-md btn-primary border-0 shadow me-2">Update</button>
                         </form>
@@ -65,7 +78,8 @@
                 name: props.admin.name, 
                 email: props.admin.email, 
                 password: '', 
-                password_confirmation: '' 
+                password_confirmation: '',
+                role: props.admin.role ?? 'admin'
             });
 
             const submit = () => {
@@ -74,6 +88,7 @@
                     email: form.email,
                     password: form.password,
                     password_confirmation: form.password_confirmation,
+                    role: form.role,
                 }, {
                     onSuccess: () => {
                         Swal.fire({

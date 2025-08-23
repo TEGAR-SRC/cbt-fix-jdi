@@ -1,0 +1,103 @@
+<template>
+  <Head>
+    <title>Sesi Ujian - Guru</title>
+  </Head>
+  <div class="container-fluid mb-5 mt-5">
+    <div class="row">
+      <div class="col-md-8">
+        <div class="row">
+          <div class="col-md-3 col-12 mb-2">
+            <Link :href="`${basePath}/exam-sessions/create`" class="btn btn-md btn-primary border-0 shadow w-100" type="button"><i class="fa fa-plus-circle"></i> Tambah</Link>
+          </div>
+          <div class="col-md-9 col-12 mb-2">
+            <form @submit.prevent="handleSearch">
+              <div class="input-group">
+                <input type="text" class="form-control border-0 shadow" v-model="search" placeholder="masukkan kata kunci dan enter...">
+                <span class="input-group-text border-0 shadow"><i class="fa fa-search"></i></span>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row mt-1">
+      <div class="col-md-12">
+        <div class="card border-0 shadow">
+          <div class="card-body">
+            <div class="table-responsive">
+              <table class="table table-bordered table-centered table-nowrap mb-0 rounded">
+                <thead class="thead-dark">
+                  <tr class="border-0">
+                    <th class="border-0 rounded-start" style="width:5%">No.</th>
+                    <th class="border-0">Ujian</th>
+                    <th class="border-0">Sesi</th>
+                    <th class="border-0">Siswa</th>
+                    <th class="border-0">Mulai</th>
+                    <th class="border-0">Selesai</th>
+                    <th class="border-0 rounded-end" style="width:15%">Aksi</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="(exam_session, index) in exam_sessions.data" :key="index">
+                    <td class="fw-bold text-center">{{ ++index + (exam_sessions.current_page - 1) * exam_sessions.per_page }}</td>
+                    <td>
+                      <strong class="fw-bold">{{ exam_session.exam.title }}</strong>
+                      <ul class="mt-2">
+                        <li>Kelas : <strong class="fw-bold">{{ exam_session.exam.classroom.title }}</strong></li>
+                        <li>Pelajaran : <strong class="fw-bold">{{ exam_session.exam.lesson.title }}</strong></li>
+                      </ul>
+                    </td>
+                    <td>{{ exam_session.title }}</td>
+                    <td class="text-center">{{ exam_session.exam_groups.length }}</td>
+                    <td>{{ exam_session.start_time }}</td>
+                    <td>{{ exam_session.end_time }}</td>
+                    <td class="text-center">
+                      <Link :href="`${basePath}/exam-sessions/${exam_session.id}`" class="btn btn-sm btn-primary border-0 shadow me-2" type="button"><i class="fa fa-plus-circle"></i></Link>
+                      <Link :href="`${basePath}/exam-sessions/${exam_session.id}/edit`" class="btn btn-sm btn-info border-0 shadow me-2" type="button"><i class="fa fa-pencil-alt"></i></Link>
+                      <button @click.prevent="destroy(exam_session.id)" class="btn btn-sm btn-danger border-0"><i class="fa fa-trash"></i></button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <Pagination :links="exam_sessions.links" align="end" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import StaffLayout from '../../../Layouts/Staff.vue';
+import Pagination from '../../../Components/Pagination.vue';
+import { Head, Link, router } from '@inertiajs/vue3';
+import { ref } from 'vue';
+import Swal from 'sweetalert2';
+
+export default {
+  layout: StaffLayout,
+  components: { Head, Link, Pagination },
+  props: { exam_sessions: Object },
+  setup() {
+    const search = ref('' || (new URL(document.location)).searchParams.get('q'));
+    const basePath = `/${(window?.app?.page?.url || window.location.pathname).split('/')[1] || 'teacher'}`;
+    const handleSearch = () => { router.get(`${basePath}/exam-sessions`, { q: search.value }); };
+    const destroy = (id) => {
+      Swal.fire({
+        title: 'Apakah Anda yakin?',
+        text: 'Anda tidak akan dapat mengembalikan ini!',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!'
+      }).then((result) => { if (result.isConfirmed) { router.delete(`${basePath}/exam-sessions/${id}`); Swal.fire({ title: 'Deleted!', text: 'Sesi Ujian Berhasil Dihapus!.', icon: 'success', timer: 2000, showConfirmButton: false }); } });
+    };
+    return { search, handleSearch, destroy, basePath };
+  }
+}
+</script>
+
+<style></style>

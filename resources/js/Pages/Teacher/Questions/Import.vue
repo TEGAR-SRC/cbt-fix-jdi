@@ -2,11 +2,11 @@
   <Head>
     <title>Import Soal Ujian - CBT AI</title>
   </Head>
-  <TeacherLayout>
+  <StaffLayout>
     <div class="container-fluid mb-5 mt-4">
       <div class="row">
         <div class="col-md-12">
-          <Link :href="`/teacher/exams/${exam.id}`" class="btn btn-md btn-primary border-0 shadow mb-3 me-3" type="button">
+          <Link :href="`${basePath}/exams/${exam.id}`" class="btn btn-md btn-primary border-0 shadow mb-3 me-3" type="button">
             <i class="fa fa-long-arrow-alt-left me-2"></i> Kembali
           </Link>
           <a href="/assets/excel/questions.xls" target="_blank" class="btn btn-md btn-success border-0 shadow mb-3 text-white" type="button">
@@ -31,22 +31,23 @@
         </div>
       </div>
     </div>
-  </TeacherLayout>
+  </StaffLayout>
   
 </template>
 <script>
-import TeacherLayout from '../../../Layouts/Teacher.vue'
+import StaffLayout from '../../../Layouts/Staff.vue'
 import { Head, Link, router } from '@inertiajs/vue3'
 import { reactive } from 'vue'
 export default {
-  components: { TeacherLayout, Head, Link },
+  components: { StaffLayout, Head, Link },
   props: { exam: Object, errors: Object },
   setup(props){
     const form = reactive({ file: '' })
+    const basePath = `/${(window?.app?.page?.url || window.location.pathname).split('/')[1] || 'teacher'}`
     const submit = () => {
-      router.post(`/teacher/exams/${props.exam.id}/questions/import`, { file: form.file }, { forceFormData: true })
+      router.post(`${basePath}/exams/${props.exam.id}/questions/import`, { file: form.file }, { forceFormData: true })
     }
-    return { form, submit }
+    return { form, submit, basePath }
   }
 }
 </script>

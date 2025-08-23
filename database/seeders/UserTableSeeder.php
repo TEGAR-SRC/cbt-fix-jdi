@@ -34,5 +34,16 @@ class UserTableSeeder extends Seeder
                 'subject'   => 'Matematika',
             ]
         );
+
+        // Operator user
+        User::updateOrCreate(
+            ['email' => 'operator@gmail.com'],
+            [
+                'name'      => 'Operator Sekolah',
+                'password'  => bcrypt('operator123'),
+                'role'      => 'operator',
+                'subject'   => null,
+            ]
+        );
     }
 }

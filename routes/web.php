@@ -19,6 +19,12 @@ Route::prefix('admin')->group(function() {
         
     //route resource admins (manage admin users)
     Route::resource('/admins', \App\Http\Controllers\Admin\AdminController::class, ['as' => 'admin']);
+
+    // route resource guardians (parents)
+    Route::resource('/guardians', \App\Http\Controllers\Admin\GuardianController::class, ['as' => 'admin']);
+    Route::post('/guardians/{guardian}/account', [\App\Http\Controllers\Admin\GuardianController::class, 'createAccount'])->name('admin.guardians.account.create');
+    Route::put('/guardians/{guardian}/account', [\App\Http\Controllers\Admin\GuardianController::class, 'updateAccount'])->name('admin.guardians.account.update');
+    Route::delete('/guardians/{guardian}/account', [\App\Http\Controllers\Admin\GuardianController::class, 'deleteAccount'])->name('admin.guardians.account.delete');
         
         //route student import
         Route::get('/students/import', [\App\Http\Controllers\Admin\StudentController::class, 'import'])->name('admin.students.import');
@@ -93,6 +99,16 @@ Route::prefix('admin')->group(function() {
 
     // separate exam control page
     Route::get('/exam-control', [\App\Http\Controllers\Admin\ExamControlController::class, 'index'])->name('admin.exam_control.index');
+
+    // Admin-accessible Dinas monitoring (read-only proxy)
+    Route::prefix('/dinas')->group(function(){
+        // Dashboard
+        Route::get('/', [\App\Http\Controllers\Dinas\DashboardController::class, 'index'])->name('admin.dinas.dashboard');
+        // Monitoring list
+        Route::get('/monitor', [\App\Http\Controllers\Dinas\MonitorController::class, 'index'])->name('admin.dinas.monitor.index');
+        // Monitoring detail
+        Route::get('/monitor/{grade}', [\App\Http\Controllers\Dinas\MonitorController::class, 'show'])->name('admin.dinas.monitor.show');
+    });
     });
 });
 
@@ -110,7 +126,11 @@ Route::get('/login', function () {
     if(auth()->check()) {
         // already logged in: redirect by role
         $role = auth()->user()->role ?? 'admin';
-        return $role === 'teacher' ? redirect()->route('teacher.dashboard') : redirect()->route('admin.dashboard');
+    if ($role === 'teacher') { return redirect()->route('teacher.dashboard'); }
+    if ($role === 'operator') { return redirect()->route('operator.dashboard'); }
+    if ($role === 'parent') { return redirect()->route('parent.grades.index'); }
+    if ($role === 'dinas') { return redirect()->route('dinas.dashboard'); }
+    return redirect()->route('admin.dashboard');
     }
     return \Inertia\Inertia::render('Auth/Login');
 })->name('login');
@@ -119,6 +139,25 @@ Route::get('/login', function () {
 Route::get('/beranda', function () {
     return \Inertia\Inertia::render('Student/Logout/Beranda');
 })->name('student.beranda');
+ 
+// prefix "parent" (orang tua)
+Route::prefix('parent')->group(function () {
+    // Logged-in parent accounts see linked students automatically
+    Route::middleware(['auth','role:parent'])->group(function(){
+        Route::get('/grades', [\App\Http\Controllers\Parent\GradeController::class, 'index'])->name('parent.grades.index');
+    });
+    // Public lookup by NIS (optional for non-logged-in visitors)
+    Route::get('/grades/filter', [\App\Http\Controllers\Parent\GradeController::class, 'filter'])->name('parent.grades.filter');
+});
+
+// prefix "dinas" (Dinas Pendidikan) — read-only monitoring
+Route::prefix('dinas')->group(function () {
+    Route::middleware(['auth','role:dinas'])->group(function(){
+        Route::get('/dashboard', [\App\Http\Controllers\Dinas\DashboardController::class, 'index'])->name('dinas.dashboard');
+        Route::get('/monitor', [\App\Http\Controllers\Dinas\MonitorController::class, 'index'])->name('dinas.monitor.index');
+        Route::get('/monitor/{grade}', [\App\Http\Controllers\Dinas\MonitorController::class, 'show'])->name('dinas.monitor.show');
+    });
+});
 
 // prefix "teacher"
 Route::prefix('teacher')->group(function () {
@@ -146,8 +185,145 @@ Route::prefix('teacher')->group(function () {
     Route::get('/exams/{exam}/questions/import', [\App\Http\Controllers\Teacher\ExamController::class, 'import'])->name('teacher.exams.questions.import');
     Route::post('/exams/{exam}/questions/import', [\App\Http\Controllers\Teacher\ExamController::class, 'storeImport'])->name('teacher.exams.questions.storeImport');
 
-    // Bank Soal index (placeholder)
-    Route::get('/questions', function () { return \Inertia\Inertia::render('Teacher/Questions/Index'); })->name('teacher.questions.index');
+    // Teacher: AI Import routes
+    Route::get('/exams/{exam}/questions/ai-import', [\App\Http\Controllers\Teacher\AIImportController::class, 'create'])->name('teacher.exam.questionAIImport');
+    Route::post('/exams/{exam}/questions/ai-import/generate', [\App\Http\Controllers\Teacher\AIImportController::class, 'generate'])->name('teacher.exam.questionAIImportGenerate');
+    Route::post('/exams/{exam}/questions/ai-import/confirm', [\App\Http\Controllers\Teacher\AIImportController::class, 'confirm'])->name('teacher.exam.questionAIImportConfirm');
+
+    // Bank Soal index
+    Route::get('/questions', [\App\Http\Controllers\Teacher\QuestionBankController::class, 'index'])->name('teacher.questions.index');
+
+    // Reports (Hasil Ujian)
+    Route::get('/reports', [\App\Http\Controllers\Teacher\ReportController::class, 'index'])->name('teacher.reports.index');
+    Route::get('/reports/filter', [\App\Http\Controllers\Teacher\ReportController::class, 'filter'])->name('teacher.reports.filter');
+    Route::get('/reports/export', [\App\Http\Controllers\Teacher\ReportController::class, 'export'])->name('teacher.reports.export');
+
+    // Teacher: Exam Sessions CRUD + enrollee management
+    Route::get('/exam-sessions', [\App\Http\Controllers\Teacher\ExamSessionController::class, 'index'])->name('teacher.exam_sessions.index');
+    Route::get('/exam-sessions/create', [\App\Http\Controllers\Teacher\ExamSessionController::class, 'create'])->name('teacher.exam_sessions.create');
+    Route::post('/exam-sessions', [\App\Http\Controllers\Teacher\ExamSessionController::class, 'store'])->name('teacher.exam_sessions.store');
+    Route::get('/exam-sessions/{exam_session}', [\App\Http\Controllers\Teacher\ExamSessionController::class, 'show'])->name('teacher.exam_sessions.show');
+    Route::get('/exam-sessions/{exam_session}/edit', [\App\Http\Controllers\Teacher\ExamSessionController::class, 'edit'])->name('teacher.exam_sessions.edit');
+    Route::put('/exam-sessions/{exam_session}', [\App\Http\Controllers\Teacher\ExamSessionController::class, 'update'])->name('teacher.exam_sessions.update');
+    Route::delete('/exam-sessions/{exam_session}', [\App\Http\Controllers\Teacher\ExamSessionController::class, 'destroy'])->name('teacher.exam_sessions.destroy');
+    Route::get('/exam-sessions/{exam_session}/enrolle/create', [\App\Http\Controllers\Teacher\ExamSessionController::class, 'createEnrolle'])->name('teacher.exam_sessions.createEnrolle');
+    Route::post('/exam-sessions/{exam_session}/enrolle/store', [\App\Http\Controllers\Teacher\ExamSessionController::class, 'storeEnrolle'])->name('teacher.exam_sessions.storeEnrolle');
+    Route::delete('/exam-sessions/{exam_session}/enrolle/{exam_group}/destroy', [\App\Http\Controllers\Teacher\ExamSessionController::class, 'destroyEnrolle'])->name('teacher.exam_sessions.destroyEnrolle');
+
+    // Teacher: Exam Control and Monitoring actions
+    Route::get('/exam-control', [\App\Http\Controllers\Teacher\ExamControlController::class, 'index'])->name('teacher.exam_control.index');
+    Route::get('/monitor', [\App\Http\Controllers\Teacher\MonitorController::class, 'index'])->name('teacher.monitor.index');
+    Route::get('/monitor/{grade}', [\App\Http\Controllers\Teacher\MonitorController::class, 'show'])->name('teacher.monitor.show');
+    Route::post('/monitor/{grade}/unlock', [\App\Http\Controllers\Teacher\MonitorController::class, 'unlock'])->name('teacher.monitor.unlock');
+    Route::post('/monitor/{grade}/stop', [\App\Http\Controllers\Teacher\MonitorController::class, 'stop'])->name('teacher.monitor.stop');
+    Route::post('/monitor/{grade}/reopen', [\App\Http\Controllers\Teacher\MonitorController::class, 'reopen'])->name('teacher.monitor.reopen');
+    Route::post('/monitor/{grade}/add-time', [\App\Http\Controllers\Teacher\MonitorController::class, 'addTime'])->name('teacher.monitor.add_time');
+
+    // Teacher: Classrooms CRUD
+    Route::get('/classrooms', [\App\Http\Controllers\Teacher\ClassroomController::class, 'index'])->name('teacher.classrooms.index');
+    Route::get('/classrooms/create', [\App\Http\Controllers\Teacher\ClassroomController::class, 'create'])->name('teacher.classrooms.create');
+    Route::post('/classrooms', [\App\Http\Controllers\Teacher\ClassroomController::class, 'store'])->name('teacher.classrooms.store');
+    Route::get('/classrooms/{classroom}/edit', [\App\Http\Controllers\Teacher\ClassroomController::class, 'edit'])->name('teacher.classrooms.edit');
+    Route::put('/classrooms/{classroom}', [\App\Http\Controllers\Teacher\ClassroomController::class, 'update'])->name('teacher.classrooms.update');
+    Route::delete('/classrooms/{classroom}', [\App\Http\Controllers\Teacher\ClassroomController::class, 'destroy'])->name('teacher.classrooms.destroy');
+
+    // Teacher: Students CRUD + import
+    Route::get('/students', [\App\Http\Controllers\Teacher\StudentController::class, 'index'])->name('teacher.students.index');
+    Route::get('/students/export', [\App\Http\Controllers\Teacher\StudentController::class, 'export'])->name('teacher.students.export');
+    Route::get('/students/create', [\App\Http\Controllers\Teacher\StudentController::class, 'create'])->name('teacher.students.create');
+    Route::post('/students', [\App\Http\Controllers\Teacher\StudentController::class, 'store'])->name('teacher.students.store');
+    Route::get('/students/import', [\App\Http\Controllers\Teacher\StudentController::class, 'import'])->name('teacher.students.import');
+    Route::post('/students/import', [\App\Http\Controllers\Teacher\StudentController::class, 'storeImport'])->name('teacher.students.storeImport');
+    Route::get('/students/{student}/edit', [\App\Http\Controllers\Teacher\StudentController::class, 'edit'])->name('teacher.students.edit');
+    Route::put('/students/{student}', [\App\Http\Controllers\Teacher\StudentController::class, 'update'])->name('teacher.students.update');
+    Route::delete('/students/{student}', [\App\Http\Controllers\Teacher\StudentController::class, 'destroy'])->name('teacher.students.destroy');
+
+    // Teacher: Questions export (by exam or bank soal filters)
+    Route::get('/exams/{exam}/questions/export', [\App\Http\Controllers\Teacher\ExamController::class, 'exportQuestions'])->name('teacher.exams.questions.export');
+    Route::get('/questions/export', [\App\Http\Controllers\Teacher\QuestionBankController::class, 'export'])->name('teacher.questions.export');
+    });
+});
+
+// prefix "operator"
+Route::prefix('operator')->group(function () {
+    Route::group(['middleware' => ['auth','role:operator']], function () {
+        Route::get('/dashboard', App\Http\Controllers\Operator\DashboardController::class)->name('operator.dashboard');
+
+    // Operator: Exams (reuse Teacher controller)
+    Route::get('/exams', [\App\Http\Controllers\Teacher\ExamController::class, 'index'])->name('operator.exams.index');
+    Route::get('/exams/create', [\App\Http\Controllers\Teacher\ExamController::class, 'create'])->name('operator.exams.create');
+    Route::post('/exams', [\App\Http\Controllers\Teacher\ExamController::class, 'store'])->name('operator.exams.store');
+    Route::get('/exams/{exam}', [\App\Http\Controllers\Teacher\ExamController::class, 'show'])->name('operator.exams.show');
+    Route::get('/exams/{exam}/edit', [\App\Http\Controllers\Teacher\ExamController::class, 'edit'])->name('operator.exams.edit');
+    Route::put('/exams/{exam}', [\App\Http\Controllers\Teacher\ExamController::class, 'update'])->name('operator.exams.update');
+    Route::delete('/exams/{exam}', [\App\Http\Controllers\Teacher\ExamController::class, 'destroy'])->name('operator.exams.destroy');
+
+    // Questions under exam
+    Route::get('/exams/{exam}/questions/create', [\App\Http\Controllers\Teacher\ExamController::class, 'createQuestion'])->name('operator.exams.questions.create');
+    Route::post('/exams/{exam}/questions', [\App\Http\Controllers\Teacher\ExamController::class, 'storeQuestion'])->name('operator.exams.questions.store');
+    Route::get('/exams/{exam}/questions/{question}/edit', [\App\Http\Controllers\Teacher\ExamController::class, 'editQuestion'])->name('operator.exams.questions.edit');
+    Route::put('/exams/{exam}/questions/{question}', [\App\Http\Controllers\Teacher\ExamController::class, 'updateQuestion'])->name('operator.exams.questions.update');
+    Route::delete('/exams/{exam}/questions/{question}', [\App\Http\Controllers\Teacher\ExamController::class, 'destroyQuestion'])->name('operator.exams.questions.destroy');
+    Route::get('/exams/{exam}/questions/import', [\App\Http\Controllers\Teacher\ExamController::class, 'import'])->name('operator.exams.questions.import');
+    Route::post('/exams/{exam}/questions/import', [\App\Http\Controllers\Teacher\ExamController::class, 'storeImport'])->name('operator.exams.questions.storeImport');
+    Route::get('/exams/{exam}/questions/export', [\App\Http\Controllers\Teacher\ExamController::class, 'exportQuestions'])->name('operator.exams.questions.export');
+
+    // AI import
+    Route::get('/exams/{exam}/questions/ai-import', [\App\Http\Controllers\Teacher\AIImportController::class, 'create'])->name('operator.exam.questionAIImport');
+    Route::post('/exams/{exam}/questions/ai-import/generate', [\App\Http\Controllers\Teacher\AIImportController::class, 'generate'])->name('operator.exam.questionAIImportGenerate');
+    Route::post('/exams/{exam}/questions/ai-import/confirm', [\App\Http\Controllers\Teacher\AIImportController::class, 'confirm'])->name('operator.exam.questionAIImportConfirm');
+
+    // Bank Soal
+    Route::get('/questions', [\App\Http\Controllers\Teacher\QuestionBankController::class, 'index'])->name('operator.questions.index');
+    Route::get('/questions/export', [\App\Http\Controllers\Teacher\QuestionBankController::class, 'export'])->name('operator.questions.export');
+
+    // Exam Sessions
+    Route::get('/exam-sessions', [\App\Http\Controllers\Teacher\ExamSessionController::class, 'index'])->name('operator.exam_sessions.index');
+    Route::get('/exam-sessions/create', [\App\Http\Controllers\Teacher\ExamSessionController::class, 'create'])->name('operator.exam_sessions.create');
+    Route::post('/exam-sessions', [\App\Http\Controllers\Teacher\ExamSessionController::class, 'store'])->name('operator.exam_sessions.store');
+    Route::get('/exam-sessions/{exam_session}', [\App\Http\Controllers\Teacher\ExamSessionController::class, 'show'])->name('operator.exam_sessions.show');
+    Route::get('/exam-sessions/{exam_session}/edit', [\App\Http\Controllers\Teacher\ExamSessionController::class, 'edit'])->name('operator.exam_sessions.edit');
+    Route::put('/exam-sessions/{exam_session}', [\App\Http\Controllers\Teacher\ExamSessionController::class, 'update'])->name('operator.exam_sessions.update');
+    Route::delete('/exam-sessions/{exam_session}', [\App\Http\Controllers\Teacher\ExamSessionController::class, 'destroy'])->name('operator.exam_sessions.destroy');
+    Route::get('/exam-sessions/{exam_session}/enrolle/create', [\App\Http\Controllers\Teacher\ExamSessionController::class, 'createEnrolle'])->name('operator.exam_sessions.createEnrolle');
+    Route::post('/exam-sessions/{exam_session}/enrolle/store', [\App\Http\Controllers\Teacher\ExamSessionController::class, 'storeEnrolle'])->name('operator.exam_sessions.storeEnrolle');
+    Route::delete('/exam-sessions/{exam_session}/enrolle/{exam_group}/destroy', [\App\Http\Controllers\Teacher\ExamSessionController::class, 'destroyEnrolle'])->name('operator.exam_sessions.destroyEnrolle');
+
+    // Exam Control + Monitor
+    Route::get('/exam-control', [\App\Http\Controllers\Teacher\ExamControlController::class, 'index'])->name('operator.exam_control.index');
+    Route::get('/monitor', [\App\Http\Controllers\Teacher\MonitorController::class, 'index'])->name('operator.monitor.index');
+    Route::get('/monitor/{grade}', [\App\Http\Controllers\Teacher\MonitorController::class, 'show'])->name('operator.monitor.show');
+    Route::post('/monitor/{grade}/unlock', [\App\Http\Controllers\Teacher\MonitorController::class, 'unlock'])->name('operator.monitor.unlock');
+    Route::post('/monitor/{grade}/stop', [\App\Http\Controllers\Teacher\MonitorController::class, 'stop'])->name('operator.monitor.stop');
+    Route::post('/monitor/{grade}/reopen', [\App\Http\Controllers\Teacher\MonitorController::class, 'reopen'])->name('operator.monitor.reopen');
+    Route::post('/monitor/{grade}/add-time', [\App\Http\Controllers\Teacher\MonitorController::class, 'addTime'])->name('operator.monitor.add_time');
+
+    // Students
+    Route::get('/students', [\App\Http\Controllers\Teacher\StudentController::class, 'index'])->name('operator.students.index');
+    Route::get('/students/create', [\App\Http\Controllers\Teacher\StudentController::class, 'create'])->name('operator.students.create');
+    Route::post('/students', [\App\Http\Controllers\Teacher\StudentController::class, 'store'])->name('operator.students.store');
+    Route::get('/students/import', [\App\Http\Controllers\Teacher\StudentController::class, 'import'])->name('operator.students.import');
+    Route::post('/students/import', [\App\Http\Controllers\Teacher\StudentController::class, 'storeImport'])->name('operator.students.storeImport');
+    Route::get('/students/export', [\App\Http\Controllers\Teacher\StudentController::class, 'export'])->name('operator.students.export');
+    Route::get('/students/{student}/edit', [\App\Http\Controllers\Teacher\StudentController::class, 'edit'])->name('operator.students.edit');
+    Route::put('/students/{student}', [\App\Http\Controllers\Teacher\StudentController::class, 'update'])->name('operator.students.update');
+    Route::delete('/students/{student}', [\App\Http\Controllers\Teacher\StudentController::class, 'destroy'])->name('operator.students.destroy');
+
+    // Classrooms
+    Route::get('/classrooms', [\App\Http\Controllers\Teacher\ClassroomController::class, 'index'])->name('operator.classrooms.index');
+    Route::get('/classrooms/create', [\App\Http\Controllers\Teacher\ClassroomController::class, 'create'])->name('operator.classrooms.create');
+    Route::post('/classrooms', [\App\Http\Controllers\Teacher\ClassroomController::class, 'store'])->name('operator.classrooms.store');
+    Route::get('/classrooms/{classroom}/edit', [\App\Http\Controllers\Teacher\ClassroomController::class, 'edit'])->name('operator.classrooms.edit');
+    Route::put('/classrooms/{classroom}', [\App\Http\Controllers\Teacher\ClassroomController::class, 'update'])->name('operator.classrooms.update');
+    Route::delete('/classrooms/{classroom}', [\App\Http\Controllers\Teacher\ClassroomController::class, 'destroy'])->name('operator.classrooms.destroy');
+
+    // Reports
+    Route::get('/reports', [\App\Http\Controllers\Teacher\ReportController::class, 'index'])->name('operator.reports.index');
+    Route::get('/reports/filter', [\App\Http\Controllers\Teacher\ReportController::class, 'filter'])->name('operator.reports.filter');
+    Route::get('/reports/export', [\App\Http\Controllers\Teacher\ReportController::class, 'export'])->name('operator.reports.export');
+
+    // Lessons management (use Operator controller)
+    Route::resource('/lessons', \App\Http\Controllers\Operator\LessonController::class, ['as' => 'operator']);
     });
 });
 

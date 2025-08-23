@@ -13,6 +13,15 @@
             </span>
           </Link>
         </li>
+
+        <li class="nav-item" :class="{ 'active': $page.url.startsWith('/teacher/reports') }">
+          <Link href="/teacher/reports" class="nav-link d-flex justify-content-between">
+            <span>
+              <span class="sidebar-icon"><i class="bi bi-journal-check"></i></span>
+              <span class="sidebar-text">Laporan Nilai</span>
+            </span>
+          </Link>
+        </li>
         <li class="nav-item" :class="{ 'active': $page.url.startsWith('/teacher/exams') }">
           <Link href="/teacher/exams" class="nav-link d-flex justify-content-between">
             <span>
@@ -26,6 +35,60 @@
             <span>
               <span class="sidebar-icon"><i class="bi bi-collection"></i></span>
               <span class="sidebar-text">Bank Soal</span>
+            </span>
+          </Link>
+        </li>
+
+        <li class="nav-item" :class="{ 'active': $page.url.startsWith('/teacher/exam-sessions') }">
+          <Link href="/teacher/exam-sessions" class="nav-link d-flex justify-content-between">
+            <span>
+              <span class="sidebar-icon"><i class="bi bi-stopwatch"></i></span>
+              <span class="sidebar-text">Sesi Ujian</span>
+            </span>
+          </Link>
+        </li>
+
+        <li class="nav-item" :class="{ 'active': $page.url.startsWith('/teacher/exam-control') }">
+          <Link href="/teacher/exam-control" class="nav-link d-flex justify-content-between">
+            <span>
+              <span class="sidebar-icon"><i class="bi bi-power"></i></span>
+              <span class="sidebar-text">Kontrol Ujian</span>
+            </span>
+          </Link>
+        </li>
+
+        <li class="nav-item" :class="{ 'active': $page.url.startsWith('/teacher/monitor') }">
+          <Link href="/teacher/monitor" class="nav-link d-flex justify-content-between">
+            <span>
+              <span class="sidebar-icon"><i class="bi bi-activity"></i></span>
+              <span class="sidebar-text">Monitor</span>
+            </span>
+          </Link>
+        </li>
+
+        <li class="nav-item" :class="{ 'active': $page.url.startsWith('/teacher/classrooms') }">
+          <Link href="/teacher/classrooms" class="nav-link d-flex justify-content-between">
+            <span>
+              <span class="sidebar-icon"><i class="bi bi-back"></i></span>
+              <span class="sidebar-text">Kelas</span>
+            </span>
+          </Link>
+        </li>
+
+        <li class="nav-item" :class="{ 'active': $page.url.startsWith('/teacher/students') }">
+          <Link href="/teacher/students" class="nav-link d-flex justify-content-between">
+            <span>
+              <span class="sidebar-icon"><i class="bi bi-people"></i></span>
+              <span class="sidebar-text">Siswa</span>
+            </span>
+          </Link>
+        </li>
+
+        <li class="nav-item">
+          <Link href="/logout" method="post" as="button" class="nav-link d-flex justify-content-between w-100 text-start">
+            <span>
+              <span class="sidebar-icon"><i class="bi bi-box-arrow-right"></i></span>
+              <span class="sidebar-text">Keluar</span>
             </span>
           </Link>
         </li>

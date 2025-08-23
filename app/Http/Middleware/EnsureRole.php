@@ -25,8 +25,17 @@ class EnsureRole
             if (($user->role ?? null) === 'admin') {
                 return redirect()->route('admin.dashboard');
             }
+            if (($user->role ?? null) === 'operator') {
+                return redirect()->route('operator.dashboard');
+            }
             if (($user->role ?? null) === 'teacher') {
                 return redirect()->route('teacher.dashboard');
+            }
+            if (($user->role ?? null) === 'parent') {
+                return redirect()->route('parent.grades.index');
+            }
+            if (($user->role ?? null) === 'dinas') {
+                return redirect()->route('dinas.dashboard');
             }
             // Unknown role: logout or login
             return redirect('/login');

@@ -108,6 +108,19 @@
                     </Link>
                 </li>
 
+                <li class="nav-item" :class="{ 'active': $page.url.startsWith('/admin/guardians') }">
+                    <Link href="/admin/guardians" class="nav-link d-flex justify-content-between">
+                    <span>
+                        <span class="sidebar-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-people icon icon-xs me-2" viewBox="0 0 16 16">
+                              <path d="M15 14s1 0 1-1-1-4-5-4-5 3-5 4 1 1 1 1h8Zm-7.978-1A.261.261 0 0 1 7 12.996c.001-.264.167-1.03.76-1.72C8.312 10.629 9.282 10 11 10c1.718 0 2.687.63 3.24 1.276.593.69.758 1.457.76 1.72l-.008.002-.012.002H7.022ZM11 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4Zm-7 7s-1 0-1-1 1-4 5-4a5.5 5.5 0 0 1 2.5.598 5.7 5.7 0 0 0-1.22.713C7.31 10.629 6.34 11.259 4.622 11.259 2.904 11.259 1.935 10.629 1.382 9.982.79 9.292.625 8.525.623 8.262l.008-.002.012-.002H4.978c-.001.264-.167 1.03-.76 1.72C3.688 11.371 2.718 12 1 12c-1.718 0-2.687-.63-3.24-1.276C-.834 9.034-.999 8.267-1 8.004l.008-.002.012-.002H-1.022Z"/>
+                            </svg>
+                        </span>
+                        <span class="sidebar-text">Orang Tua</span>
+                    </span>
+                    </Link>
+                </li>
+
                 <li role="separator" class="dropdown-divider mt-2 mb-2 border-gray-700"></li>
 
                 <li class="nav-item" :class="{ 'active': $page.url.startsWith('/admin/admins') }">
@@ -120,7 +133,7 @@
                                 <path d="M8 0c-.69 0-1.542.218-2.516.56C3.485 1.246 1.982 1.8.727 2.02A.5.5 0 0 0 0 2.5v4.764c0 3.587 2.507 6.614 6.684 8.49a.5.5 0 0 0 .632 0C11.993 13.878 15 10.85 15 7.264V2.5a.5.5 0 0 0-.727-.48c-1.255.22-2.758.774-4.757 1.46C9.542.218 8.69 0 8 0z"/>
                             </svg>
                         </span>
-                        <span class="sidebar-text">Admin</span>
+                        <span class="sidebar-text">Pengguna</span>
                     </span>
                     </Link>
                 </li>
@@ -137,6 +150,19 @@
                             </svg>
                         </span>
                         <span class="sidebar-text">Monitoring Ujian</span>
+                    </span>
+                    </Link>
+                </li>
+
+                <li class="nav-item">
+                    <Link href="/admin/dinas" class="nav-link d-flex justify-content-between">
+                    <span>
+                        <span class="sidebar-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-bank icon icon-xs me-2" viewBox="0 0 16 16">
+                                <path d="M8 0 0 4l8 4 8-4-8-4Zm6 10v2h1v1H1v-1h1v-2H1V9h14v1h-1Zm-2 0H4v2h8v-2Z"/>
+                            </svg>
+                        </span>
+                        <span class="sidebar-text">Dinas Pendidikan</span>
                     </span>
                     </Link>
                 </li>
@@ -190,6 +216,20 @@
 
                 <li role="separator" class="dropdown-divider mt-2 mb-2 border-gray-700"></li>
 
+                <li class="nav-item" :class="{ 'active': $page.url.startsWith('/admin/settings') }">
+                    <Link href="/admin/settings" class="nav-link d-flex justify-content-between">
+                    <span>
+                        <span class="sidebar-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-gear icon icon-xs me-2" viewBox="0 0 16 16">
+                                <path d="M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492zM5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0z"/>
+                                <path d="M9.796 1.343c-.527-1.79-3.065-1.79-3.592 0l-.094.319a.873.873 0 0 1-1.255.52l-.292-.16c-1.64-.892-3.433.902-2.54 2.541l.159.292a.873.873 0 0 1-.52 1.255l-.319.094c-1.79.527-1.79 3.065 0 3.592l.319.094a.873.873 0 0 1 .52 1.255l-.16.292c-.892 1.64.901 3.434 2.541 2.54l.292-.159a.873.873 0 0 1 1.255.52l.094.319c.527 1.79 3.065 1.79 3.592 0l.094-.319a.873.873 0 0 1 1.255-.52l.292.16c1.64.893 3.434-.902 2.54-2.541l-.159-.292a.873.873 0 0 1 .52-1.255l.319-.094c1.79-.527 1.79-3.065 0-3.592l-.319-.094a.873.873 0 0 1-.52-1.255l.16-.292c.893-1.64-.902-3.433-2.541-2.54l-.292.159a.873.873 0 0 1-1.255-.52l-.094-.319zm-2.633.283c.246-.835 1.428-.835 1.674 0l.094.319a1.873 1.873 0 0 0 2.693 1.115l.291-.16c.764-.415 1.6.42 1.184 1.185l-.159.292a1.873 1.873 0 0 0 1.116 2.692l.318.094c.835.246.835 1.428 0 1.674l-.319.094a1.873 1.873 0 0 0-1.115 2.693l.16.291c.415.764-.42 1.6-1.185 1.184l-.291-.159a1.873 1.873 0 0 0-2.693 1.116l-.094.318c-.246.835-1.428.835-1.674 0l-.094-.319a1.873 1.873 0 0 0-2.692-1.115l-.292.16c-.764.415-1.6-.42-1.184-1.185l.159-.291A1.873 1.873 0 0 0 2.02 8.873l-.319-.094c-.835-.246-.835-1.428 0-1.674l.319-.094A1.873 1.873 0 0 0 3.135 4.32l-.16-.292c-.415-.764.42-1.6 1.185-1.184l.291.159a1.873 1.873 0 0 0 2.693-1.115l.094-.319z"/>
+                            </svg>
+                        </span>
+                        <span class="sidebar-text">Pengaturan</span>
+                    </span>
+                    </Link>
+                </li>
+
                 <li class="nav-item" :class="{ 'active': $page.url.startsWith('/admin/reports') }">
                     <Link href="/admin/reports" class="nav-link d-flex justify-content-between">
                     <span>
@@ -201,6 +241,22 @@
                             </svg>
                         </span>
                         <span class="sidebar-text">Laporan Nilai</span>
+                    </span>
+                    </Link>
+                </li>
+
+                <li role="separator" class="dropdown-divider mt-2 mb-2 border-gray-700"></li>
+
+                <li class="nav-item">
+                    <Link href="/logout" method="post" as="button" class="nav-link d-flex justify-content-between w-100 text-start">
+                    <span>
+                        <span class="sidebar-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-box-arrow-right icon icon-xs me-2" viewBox="0 0 16 16">
+                                <path d="M10 15a1 1 0 0 0 1-1v-3h-1v3H2V2h8v3h1V2a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8z"/>
+                                <path d="M15.354 8.354a.5.5 0 0 0 0-.708L12.172 4.464a.5.5 0 1 0-.708.708L13.293 7.5H6.5a.5.5 0 0 0 0 1h6.793l-1.829 2.328a.5.5 0 1 0 .708.708l3.182-3.182z"/>
+                            </svg>
+                        </span>
+                        <span class="sidebar-text">Keluar</span>
                     </span>
                     </Link>
                 </li>

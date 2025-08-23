@@ -17,8 +17,8 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            // Role: admin or teacher
-            $table->enum('role', ['admin','teacher'])->default('admin');
+            // Role: admin, operator, teacher (parent added via later migration)
+            $table->enum('role', ['admin','operator','teacher'])->default('admin');
             // Optional: teacher subject (if user is a teacher). Null for admins
             $table->string('subject')->nullable();
             $table->rememberToken();

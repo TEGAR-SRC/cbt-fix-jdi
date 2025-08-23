@@ -37,6 +37,7 @@
                                         <th class="border-0 rounded-start" style="width:5%">No.</th>
                                         <th class="border-0">Nama</th>
                                         <th class="border-0">Email</th>
+                                        <th class="border-0">Role</th>
                                         <th class="border-0 rounded-end" style="width:15%">Aksi</th>
                                     </tr>
                                 </thead>
@@ -46,6 +47,7 @@
                                         <td class="fw-bold text-center">{{ ++index + (admins.current_page - 1) * admins.per_page }}</td>
                                         <td>{{ admin.name }}</td>
                                         <td>{{ admin.email }}</td>
+                                        <td><span class="badge bg-secondary text-uppercase">{{ admin.role }}</span></td>
                                         <td class="text-center">
                                             <Link :href="`/admin/admins/${admin.id}/edit`" class="btn btn-sm btn-info border-0 shadow me-2" type="button"><i class="fa fa-pencil-alt"></i></Link>
                                             <button @click.prevent="destroy(admin.id)" class="btn btn-sm btn-danger border-0"><i class="fa fa-trash"></i></button>

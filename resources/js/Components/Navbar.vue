@@ -53,7 +53,7 @@
 
 <style>
 /* Navbar polish */
-.navbar-dashboard.bg-dark { background:#0f1420 !important; }
+.navbar-dashboard.bg-dark { background:#1c1c1d !important; }
 .navbar-dashboard .avatar { box-shadow: 0 0 0 2px rgba(13,110,253,.45); }
 .neo-blur { backdrop-filter: saturate(1.2) blur(6px); }
 </style>

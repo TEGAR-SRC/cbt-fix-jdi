@@ -1,5 +1,5 @@
 <template>
-  <TeacherLayout>
+  <StaffLayout>
     <div class="container-fluid py-4">
       <h4 class="fw-semibold mb-3">Edit Soal</h4>
       <form @submit.prevent="submit">
@@ -26,17 +26,17 @@
         </div>
         <div class="mt-4">
           <button class="btn btn-primary">Update</button>
-          <Link :href="`/teacher/exams/${exam.id}`" class="btn btn-light ms-2">Batal</Link>
+          <Link :href="`${basePath}/exams/${exam.id}`" class="btn btn-light ms-2">Batal</Link>
         </div>
       </form>
     </div>
-  </TeacherLayout>
+  </StaffLayout>
 </template>
 <script>
 import { Link, router } from '@inertiajs/vue3'
-import TeacherLayout from '../../../Layouts/Teacher.vue'
+import StaffLayout from '../../../Layouts/Staff.vue'
 export default {
-  components: { TeacherLayout, Link },
+  components: { StaffLayout, Link },
   props: { exam: Object, question: Object },
   data(){
     return { form: {
@@ -49,8 +49,14 @@ export default {
       answer: String(this.question?.answer || '1')
     } }
   },
+  computed: {
+    basePath(){
+      const seg = (this.$page?.url || window.location.pathname).split('/')[1] || 'teacher'
+      return `/${seg}`
+    }
+  },
   methods:{
-    submit(){ router.put(`/teacher/exams/${this.exam.id}/questions/${this.question.id}`, this.form) }
+    submit(){ router.put(`${this.basePath}/exams/${this.exam.id}/questions/${this.question.id}`, this.form) }
   }
 }
 </script>

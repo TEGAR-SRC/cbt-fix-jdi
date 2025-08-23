@@ -13,7 +13,8 @@ class AdminController extends Controller
      */
     public function index()
     {
-        $admins = User::when(request()->q, function ($query) {
+    $admins = User::whereIn('role', ['admin','operator','teacher','dinas'])
+            ->when(request()->q, function ($query) {
             $q = request()->q;
             $query->where(function ($sub) use ($q) {
                 $sub->where('name', 'like', "%{$q}%")
@@ -45,12 +46,14 @@ class AdminController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email',
             'password' => 'required|string|min:6|confirmed',
+            'role' => 'nullable|in:admin,operator,teacher,dinas',
         ]);
 
         User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => $request->password, // hashed by cast in User model
+            'role' => $request->input('role', 'admin'),
         ]);
 
         return redirect()->route('admin.admins.index');
@@ -75,6 +78,7 @@ class AdminController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email,' . $admin->id,
             'password' => 'nullable|string|min:6|confirmed',
+            'role' => 'nullable|in:admin,operator,teacher,dinas',
         ]);
 
         $data = [
@@ -84,6 +88,10 @@ class AdminController extends Controller
 
         if ($request->filled('password')) {
             $data['password'] = $request->password; // hashed by cast
+        }
+
+        if ($request->filled('role')) {
+            $data['role'] = $request->role;
         }
 
         $admin->update($data);

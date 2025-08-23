@@ -19,7 +19,11 @@ class LoginResponse implements LoginResponseContract
             return redirect()->route('teacher.dashboard');
         }
 
+        if ($user && ($user->role ?? null) === 'operator') {
+            return redirect()->route('operator.dashboard');
+        }
+
         // Fallback: if student guard is used elsewhere, keep original behavior
-        return redirect('/');
+        return redirect('/login');
     }
 }
