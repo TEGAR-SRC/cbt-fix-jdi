@@ -2,14 +2,25 @@
     <Head>
         <title>Tambah Ujian - Aplikasi Ujian Online</title>
     </Head>
-    <div class="container-fluid mb-5 mt-5">
+    <div class="container-fluid mb-5 mt-4">
+        <!-- page header strip -->
+    <div class="neo-pagehead card border-0 shadow-sm mb-4">
+            <div class="card-body py-3 d-flex align-items-center justify-content-between">
+                <div class="d-flex align-items-center">
+                    <div class="neo-bullet me-3"></div>
+                    <div>
+            <h5 class="mb-0 fw-bold text-dark">Buat Ujian</h5>
+                        <small class="text-muted">Atur detail ujian dan preferensi</small>
+                    </div>
+                </div>
+        <Link href="/admin/exams" class="btn btn-sm btn-outline-secondary"><i class="fa fa-long-arrow-alt-left me-1"></i> Kembali</Link>
+            </div>
+        </div>
         <div class="row">
             <div class="col-md-12">
-                <Link href="/admin/exams" class="btn btn-md btn-primary border-0 shadow mb-3" type="button"><i class="fa fa-long-arrow-alt-left me-2"></i> Kembali</Link>
-                <div class="card border-0 shadow">
+                <div class="card border-0 shadow-sm">
                     <div class="card-body">
-                        <h5><i class="fa fa-edit"></i> Tambah Ujian</h5>
-                        <hr>
+                        <h6 class="text-uppercase text-muted mb-3">Informasi Ujian</h6>
                         <form @submit.prevent="submit">
 
                             <div class="mb-4">
@@ -113,8 +124,10 @@
                                 </div>
                             </div>
 
-                            <button type="submit" class="btn btn-md btn-primary border-0 shadow me-2">Simpan</button>
-                            <button type="reset" class="btn btn-md btn-warning border-0 shadow">Reset</button>
+                            <div class="d-flex justify-content-end">
+                                <button type="reset" class="btn btn-light border me-2">Reset</button>
+                                <button type="submit" class="btn btn-primary">Simpan</button>
+                            </div>
                         </form>
                     </div>
                 </div>
@@ -219,5 +232,10 @@
 </script>
 
 <style>
-
+/* Create Exam page visuals */
+.neo-pagehead { background:#fff; }
+.neo-bullet { width: 10px; height: 28px; border-radius: 8px; background: #0d6efd; box-shadow: 0 6px 18px rgba(13,110,253,.25); }
+.form-control, .form-select { border-color: #e2e8f0; }
+.form-control:focus, .form-select:focus { border-color: #86b7fe; box-shadow: 0 0 0 .2rem rgba(13,110,253,.15); }
+.card.shadow-sm { box-shadow: 0 .25rem .75rem rgba(2, 6, 23, 0.06)!important; }
 </style>

@@ -5,8 +5,8 @@ use Illuminate\Support\Facades\Route;
 //prefix "admin"
 Route::prefix('admin')->group(function() {
 
-    //middleware "auth"
-    Route::group(['middleware' => ['auth']], function () {
+    //middleware auth + role admin
+    Route::group(['middleware' => ['auth','role:admin']], function () {
 
         //route dashboard
         Route::get('/dashboard', App\Http\Controllers\Admin\DashboardController::class)->name('admin.dashboard');
@@ -79,6 +79,10 @@ Route::prefix('admin')->group(function() {
         //route index reports export
         Route::get('/reports/export', [\App\Http\Controllers\Admin\ReportController::class, 'export'])->name('admin.reports.export');
 
+    // settings
+    Route::get('/settings', [\App\Http\Controllers\Admin\SettingController::class, 'index'])->name('admin.settings.index');
+    Route::post('/settings', [\App\Http\Controllers\Admin\SettingController::class, 'update'])->name('admin.settings.update');
+
     // monitoring routes
     Route::get('/monitor', [\App\Http\Controllers\Admin\MonitorController::class, 'index'])->name('admin.monitor.index');
     Route::get('/monitor/{grade}', [\App\Http\Controllers\Admin\MonitorController::class, 'show'])->name('admin.monitor.show');
@@ -92,22 +96,60 @@ Route::prefix('admin')->group(function() {
     });
 });
 
-//route homepage
+//route homepage -> keep student landing
 Route::get('/', function () {
-
     //cek session student
     if(auth()->guard('student')->check()) {
         return redirect()->route('student.dashboard');
     }
-
-    //return view login
     return \Inertia\Inertia::render('Student/Login/Index');
 });
+
+// admin/teacher login page
+Route::get('/login', function () {
+    if(auth()->check()) {
+        // already logged in: redirect by role
+        $role = auth()->user()->role ?? 'admin';
+        return $role === 'teacher' ? redirect()->route('teacher.dashboard') : redirect()->route('admin.dashboard');
+    }
+    return \Inertia\Inertia::render('Auth/Login');
+})->name('login');
 
 // simple beranda page after student logout
 Route::get('/beranda', function () {
     return \Inertia\Inertia::render('Student/Logout/Beranda');
 })->name('student.beranda');
+
+// prefix "teacher"
+Route::prefix('teacher')->group(function () {
+    Route::group(['middleware' => ['auth','role:teacher']], function () {
+        // teacher dashboard
+        Route::get('/dashboard', App\Http\Controllers\Teacher\DashboardController::class)->name('teacher.dashboard');
+
+    // Teacher exams (CRUD limited to own subject)
+    Route::get('/exams', [\App\Http\Controllers\Teacher\ExamController::class, 'index'])->name('teacher.exams.index');
+    Route::get('/exams/create', [\App\Http\Controllers\Teacher\ExamController::class, 'create'])->name('teacher.exams.create');
+    Route::post('/exams', [\App\Http\Controllers\Teacher\ExamController::class, 'store'])->name('teacher.exams.store');
+    Route::get('/exams/{exam}', [\App\Http\Controllers\Teacher\ExamController::class, 'show'])->name('teacher.exams.show');
+    Route::get('/exams/{exam}/edit', [\App\Http\Controllers\Teacher\ExamController::class, 'edit'])->name('teacher.exams.edit');
+    Route::put('/exams/{exam}', [\App\Http\Controllers\Teacher\ExamController::class, 'update'])->name('teacher.exams.update');
+    Route::delete('/exams/{exam}', [\App\Http\Controllers\Teacher\ExamController::class, 'destroy'])->name('teacher.exams.destroy');
+
+    // Questions under a teacher's exam
+    Route::get('/exams/{exam}/questions/create', [\App\Http\Controllers\Teacher\ExamController::class, 'createQuestion'])->name('teacher.exams.questions.create');
+    Route::post('/exams/{exam}/questions', [\App\Http\Controllers\Teacher\ExamController::class, 'storeQuestion'])->name('teacher.exams.questions.store');
+    Route::get('/exams/{exam}/questions/{question}/edit', [\App\Http\Controllers\Teacher\ExamController::class, 'editQuestion'])->name('teacher.exams.questions.edit');
+    Route::put('/exams/{exam}/questions/{question}', [\App\Http\Controllers\Teacher\ExamController::class, 'updateQuestion'])->name('teacher.exams.questions.update');
+    Route::delete('/exams/{exam}/questions/{question}', [\App\Http\Controllers\Teacher\ExamController::class, 'destroyQuestion'])->name('teacher.exams.questions.destroy');
+
+    // Teacher: Import questions (Excel) like admin
+    Route::get('/exams/{exam}/questions/import', [\App\Http\Controllers\Teacher\ExamController::class, 'import'])->name('teacher.exams.questions.import');
+    Route::post('/exams/{exam}/questions/import', [\App\Http\Controllers\Teacher\ExamController::class, 'storeImport'])->name('teacher.exams.questions.storeImport');
+
+    // Bank Soal index (placeholder)
+    Route::get('/questions', function () { return \Inertia\Inertia::render('Teacher/Questions/Index'); })->name('teacher.questions.index');
+    });
+});
 
 //login students
 Route::post('/students/login', \App\Http\Controllers\Student\LoginController::class)->name('student.login');

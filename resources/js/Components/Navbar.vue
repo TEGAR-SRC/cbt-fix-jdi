@@ -1,8 +1,10 @@
 <template>
-    <nav class="navbar navbar-top navbar-expand navbar-dashboard navbar-dark ps-0 pe-2 pb-0">
-        <div class="container-fluid px-0">
+    <nav class="navbar navbar-top navbar-expand navbar-dashboard bg-dark text-white border-0 ps-0 pe-2 pb-0 shadow-sm sticky-top neo-blur">
+    <div class="container-fluid px-0">
             <div class="d-flex justify-content-between w-100" id="navbarSupportedContent">
-                <div class="d-flex align-items-center">
+        <div class="d-flex align-items-center gap-2 ps-2">
+            <img v-if="$page.props.branding?.school_logo" :src="$page.props.branding.school_logo" alt="logo" style="height:28px"/>
+                    <span class="fw-semibold text-white" style="text-shadow: 0 1px 2px rgba(0,0,0,.4)">{{ $page.props.branding?.site_name || 'CBT AI' }}</span>
                 </div>
                 <!-- Navbar links -->
                 <ul class="navbar-nav align-items-center">
@@ -10,9 +12,9 @@
                         <a class="nav-link dropdown-toggle pt-1 px-0" href="#" role="button" data-bs-toggle="dropdown"
                             aria-expanded="false">
                             <div class="media d-flex align-items-center">
-                                <img class="avatar rounded-circle" alt="Image placeholder" :src="`https://ui-avatars.com/api/?name=${$page.props.auth.user.name}&amp;background=4e73df&amp;color=ffffff&amp;size=100`">
-                                <div class="media-body ms-2 text-dark align-items-center d-none d-lg-block">
-                                    <span class="mb-0 font-small fw-bold text-gray-900">{{ $page.props.auth.user.name }}</span>
+                                <img class="avatar rounded-circle" alt="Image placeholder" :src="`https://ui-avatars.com/api/?name=${$page.props.auth.user.name}&amp;background=0d6efd&amp;color=ffffff&amp;size=100`">
+                                <div class="media-body ms-2 align-items-center d-none d-lg-block">
+                                    <span class="mb-0 font-small fw-bold text-dark">{{ $page.props.auth.user.name }}</span>
                                 </div>
                             </div>
                         </a>
@@ -50,5 +52,8 @@
 </script>
 
 <style>
-
+/* Navbar polish */
+.navbar-dashboard.bg-dark { background:#0f1420 !important; }
+.navbar-dashboard .avatar { box-shadow: 0 0 0 2px rgba(13,110,253,.45); }
+.neo-blur { backdrop-filter: saturate(1.2) blur(6px); }
 </style>
