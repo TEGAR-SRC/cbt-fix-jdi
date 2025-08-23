@@ -56,6 +56,7 @@ class MonitorController extends Controller
                 'exam_session_id' => $examSessionId,
                 'status' => $status,
             ],
+            'is_admin_proxy' => request()->routeIs('admin.dinas.*'),
         ]);
     }
 
@@ -73,6 +74,7 @@ class MonitorController extends Controller
         return inertia('Dinas/Monitor/Show', [
             'grade' => $grade,
             'answers' => $answers,
+            'is_admin_proxy' => request()->routeIs('admin.dinas.*'),
         ]);
     }
 }

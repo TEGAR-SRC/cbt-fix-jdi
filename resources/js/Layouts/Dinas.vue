@@ -1,6 +1,7 @@
 <template>
   <div class="d-flex">
-    <aside class="p-3 border-end" style="width:260px;min-height:100vh;background:#fafafa">
+    <!-- Hide Dinas sidebar when opened via Admin proxy so Admin sidebar stays visible -->
+    <aside v-if="!$page.url.startsWith('/admin/dinas')" class="p-3 border-end" style="width:260px;min-height:100vh;background:#fafafa">
       <h6 class="fw-bold">Dinas Pendidikan</h6>
       <ul class="list-unstyled mt-3">
         <li class="mb-2">

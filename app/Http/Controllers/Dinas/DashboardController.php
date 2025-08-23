@@ -54,6 +54,7 @@ class DashboardController extends Controller
                 'exam_session_id' => $examSessionId,
                 'status' => $status,
             ],
+            'is_admin_proxy' => request()->routeIs('admin.dinas.*'),
         ]);
     }
 }

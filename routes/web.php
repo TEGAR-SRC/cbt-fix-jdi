@@ -17,6 +17,12 @@ Route::prefix('admin')->group(function() {
         //route resource classrooms    
         Route::resource('/classrooms', \App\Http\Controllers\Admin\ClassroomController::class, ['as' => 'admin']);
         
+    //route resource assignments (Tugas Harian)
+    Route::resource('/assignments', \App\Http\Controllers\Admin\AssignmentController::class, ['as' => 'admin']);
+    
+    //route resource tryouts
+    Route::resource('/tryouts', \App\Http\Controllers\Admin\TryoutController::class, ['as' => 'admin']);
+        
     //route resource admins (manage admin users)
     Route::resource('/admins', \App\Http\Controllers\Admin\AdminController::class, ['as' => 'admin']);
 

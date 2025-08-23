@@ -1,0 +1,73 @@
+<?php
+
+namespace App\Http\Controllers\Admin;
+
+use App\Http\Controllers\Controller;
+use App\Models\Assignment;
+use App\Models\Lesson;
+use App\Models\Classroom;
+use Illuminate\Http\Request;
+
+class AssignmentController extends Controller
+{
+    public function index(Request $request)
+    {
+        $assignments = Assignment::with(['lesson','classroom','creator'])
+            ->latest()->paginate(10);
+        return inertia('Admin/Assignments/Index', [
+            'assignments' => $assignments,
+        ]);
+    }
+
+    public function create()
+    {
+        return inertia('Admin/Assignments/Create', [
+            'lessons' => Lesson::orderBy('title')->get(['id','title']),
+            'classrooms' => Classroom::orderBy('title')->get(['id','title']),
+        ]);
+    }
+
+    public function store(Request $request)
+    {
+        $data = $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'lesson_id' => 'required|exists:lessons,id',
+            'classroom_id' => 'required|exists:classrooms,id',
+            'due_at' => 'nullable|date',
+            'published_at' => 'nullable|date',
+        ]);
+        $data['created_by'] = $request->user()->id;
+        Assignment::create($data);
+        return redirect()->route('admin.assignments.index')->with('success', 'Tugas dibuat');
+    }
+
+    public function edit(Assignment $assignment)
+    {
+        return inertia('Admin/Assignments/Edit', [
+            'assignment' => $assignment->load(['lesson','classroom']),
+            'lessons' => Lesson::orderBy('title')->get(['id','title']),
+            'classrooms' => Classroom::orderBy('title')->get(['id','title']),
+        ]);
+    }
+
+    public function update(Request $request, Assignment $assignment)
+    {
+        $data = $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'lesson_id' => 'required|exists:lessons,id',
+            'classroom_id' => 'required|exists:classrooms,id',
+            'due_at' => 'nullable|date',
+            'published_at' => 'nullable|date',
+        ]);
+        $assignment->update($data);
+        return redirect()->route('admin.assignments.index')->with('success', 'Tugas diupdate');
+    }
+
+    public function destroy(Assignment $assignment)
+    {
+        $assignment->delete();
+        return redirect()->route('admin.assignments.index')->with('success', 'Tugas dihapus');
+    }
+}

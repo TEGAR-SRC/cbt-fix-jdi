@@ -5,7 +5,7 @@
   <div class="container-fluid mb-5 mt-5">
     <div class="row">
       <div class="col-md-12">
-  <Link :href="$page.url.startsWith('/admin/dinas') ? '/admin/dinas/monitor' : '/dinas/monitor'" class="btn btn-md btn-primary border-0 shadow mb-3"><i class="fa fa-long-arrow-alt-left me-2"></i> Kembali</Link>
+  <Link :href="(is_admin_proxy ? '/admin/dinas/monitor' : '/dinas/monitor')" class="btn btn-md btn-primary border-0 shadow mb-3"><i class="fa fa-long-arrow-alt-left me-2"></i> Kembali</Link>
         <div class="card border-0 shadow">
           <div class="card-body">
             <h5>Detail Siswa</h5>
@@ -33,13 +33,10 @@ import AdminLayout from '../../../Layouts/Admin.vue';
 import DinasLayout from '../../../Layouts/Dinas.vue';
 import { Head, Link } from '@inertiajs/vue3';
 
-// Determine if this page is being accessed via the Admin proxy routes
-const isAdminProxy = typeof window !== 'undefined' && window.location.pathname.startsWith('/admin/dinas');
-
 export default {
-  layout: isAdminProxy ? AdminLayout : DinasLayout,
+  layout: (h, page) => h(page.props?.is_admin_proxy ? AdminLayout : DinasLayout, () => page),
   components: { Head, Link },
-  props: { grade: Object, answers: Array }
+  props: { grade: Object, answers: Array, is_admin_proxy: Boolean }
 }
 </script>
 <style></style>

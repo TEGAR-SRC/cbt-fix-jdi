@@ -57,7 +57,7 @@
                       <span v-if="g.status === 'exited'" class="badge bg-danger ms-2">Keluar</span>
                     </td>
                     <td>
-                      <Link :href="$page.url.startsWith('/admin/dinas') ? `/admin/dinas/monitor/${g.id}` : `/dinas/monitor/${g.id}`" class="btn btn-sm btn-secondary">Lihat</Link>
+                      <Link :href="(is_admin_proxy ? `/admin/dinas/monitor/${g.id}` : `/dinas/monitor/${g.id}`)" class="btn btn-sm btn-secondary">Lihat</Link>
                     </td>
                   </tr>
                 </tbody>
@@ -78,19 +78,18 @@ import Pagination from '../../../Components/Pagination.vue';
 import { Head, Link, router } from '@inertiajs/vue3';
 import { ref, watch } from 'vue';
 
-// Determine if this page is being accessed via the Admin proxy routes
-const isAdminProxy = typeof window !== 'undefined' && window.location.pathname.startsWith('/admin/dinas');
+// Stable: decide layout once at module init based on path to avoid runtime hiccups
+const isAdminProxyPath = typeof window !== 'undefined' && window.location.pathname.startsWith('/admin/dinas');
 
 export default {
-  layout: isAdminProxy ? AdminLayout : DinasLayout,
+  // SSR-safe dynamic layout selection using server-provided prop
+  layout: (h, page) => h(page.props?.is_admin_proxy ? AdminLayout : DinasLayout, () => page),
   components: { Head, Link, Pagination },
-  props: { sessions: Array, grades: Object, stats: Object, filters: Object },
+  props: { sessions: Array, grades: Object, stats: Object, filters: Object, is_admin_proxy: Boolean },
   setup(props){
     const selectedSession = ref(props.filters?.exam_session_id || '');
     watch(selectedSession, () => {
-      const path = (typeof window !== 'undefined' && window.location.pathname.startsWith('/admin/dinas'))
-        ? '/admin/dinas/monitor'
-        : '/dinas/monitor';
+  const path = props.is_admin_proxy ? '/admin/dinas/monitor' : '/dinas/monitor';
       router.get(path, { exam_session_id: selectedSession.value || undefined }, { preserveState: true, preserveScroll: true, replace: true });
     });
     return { selectedSession };
