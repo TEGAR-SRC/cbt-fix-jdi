@@ -9,10 +9,11 @@
 /storage/framework/
 /storage/logs/
 /vendor
-.env
-.env.backup
-.env.production
-.env.*
+# .env related ignores disabled intentionally to commit environment file
+# .env
+# .env.backup
+# .env.production
+# .env.*
 .phpactor.json
 .phpunit.result.cache
 Homestead.json

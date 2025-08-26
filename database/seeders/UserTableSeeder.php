@@ -45,5 +45,27 @@ class UserTableSeeder extends Seeder
                 'subject'   => null,
             ]
         );
+
+        // Parent user
+        User::updateOrCreate(
+            ['email' => 'parent@gmail.com'],
+            [
+                'name'      => 'Wali Murid',
+                'password'  => bcrypt('parent123'),
+                'role'      => 'parent',
+                'subject'   => null,
+            ]
+        );
+
+        // Dinas user
+        User::updateOrCreate(
+            ['email' => 'dinas@gmail.com'],
+            [
+                'name'      => 'Dinas Pendidikan',
+                'password'  => bcrypt('dinas123'),
+                'role'      => 'dinas',
+                'subject'   => null,
+            ]
+        );
     }
 }
