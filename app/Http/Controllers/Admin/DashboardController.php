@@ -9,6 +9,7 @@ use App\Models\ExamSession;
 use App\Models\Assignment;
 use App\Models\Tryout;
 use App\Models\TryoutAttempt;
+use App\Models\Question;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -35,6 +36,7 @@ class DashboardController extends Controller
         // assignments & tryouts
         $assignments = Assignment::count();
         $tryouts     = Tryout::count();
+    $questions   = Question::count();
 
         // active & ended sessions (today)
         $now = Carbon::now();
@@ -101,6 +103,25 @@ class DashboardController extends Controller
             'queue'        => [ 'pending' => 0, 'failed' => 0 ],
         ];
 
+        // recent activity (simple mix of recent sessions & exams created)
+        $recentSessions = ExamSession::orderBy('created_at','desc')->limit(5)->get()->map(function($s){
+            return [
+                'type' => 'session',
+                'title' => 'Sesi: '.($s->title ?: 'Tanpa Judul'),
+                'time' => $s->created_at?->diffForHumans(),
+                'status' => 'Created'
+            ];
+        });
+        $recentExams = Exam::orderBy('created_at','desc')->limit(5)->get()->map(function($e){
+            return [
+                'type' => 'exam',
+                'title' => 'Ujian: '.($e->title ?: 'Tanpa Judul'),
+                'time' => $e->created_at?->diffForHumans(),
+                'status' => 'Created'
+            ];
+        });
+        $recentActivity = $recentSessions->merge($recentExams)->sortByDesc('time')->take(7)->values();
+
         return inertia('Admin/Dashboard/Index', [
             'students'            => $students,
             'exams'               => $exams,
@@ -108,12 +129,14 @@ class DashboardController extends Controller
             'classrooms'          => $classrooms,
             'assignments'         => $assignments,
             'tryouts'             => $tryouts,
+            'questions'           => $questions,
             'active_sessions'     => $active_sessions,
             'ended_sessions_today'=> $ended_sessions_today,
             'session_status'      => $sessionStatus,
             'exam_activity'       => $examActivity,
             'upcoming_exams'      => $upcoming,
             'system_status'       => $systemStatus,
+            'recent_activity'     => $recentActivity,
         ]);
     }
 }
