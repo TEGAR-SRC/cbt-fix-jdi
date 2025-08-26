@@ -20,6 +20,13 @@ Route::prefix('admin')->group(function() {
         
     //route resource assignments (Tugas Harian)
     Route::resource('/assignments', \App\Http\Controllers\Admin\AssignmentController::class, ['as' => 'admin']);
+    // assignment questions (admin)
+    Route::get('/assignments/{assignment}/questions', [\App\Http\Controllers\Admin\AssignmentQuestionController::class, 'index'])->name('admin.assignments.questions.index');
+    Route::get('/assignments/{assignment}/questions/create', [\App\Http\Controllers\Admin\AssignmentQuestionController::class, 'create'])->name('admin.assignments.questions.create');
+    Route::post('/assignments/{assignment}/questions', [\App\Http\Controllers\Admin\AssignmentQuestionController::class, 'store'])->name('admin.assignments.questions.store');
+    Route::get('/assignments/{assignment}/questions/{question}/edit', [\App\Http\Controllers\Admin\AssignmentQuestionController::class, 'edit'])->name('admin.assignments.questions.edit');
+    Route::put('/assignments/{assignment}/questions/{question}', [\App\Http\Controllers\Admin\AssignmentQuestionController::class, 'update'])->name('admin.assignments.questions.update');
+    Route::delete('/assignments/{assignment}/questions/{question}', [\App\Http\Controllers\Admin\AssignmentQuestionController::class, 'destroy'])->name('admin.assignments.questions.destroy');
     
     //route resource tryouts
     Route::resource('/tryouts', \App\Http\Controllers\Admin\TryoutController::class, ['as' => 'admin']);
@@ -201,6 +208,15 @@ Route::prefix('teacher')->group(function () {
         // teacher dashboard
         Route::get('/dashboard', App\Http\Controllers\Teacher\DashboardController::class)->name('teacher.dashboard');
 
+        // Teacher assignments (reuse Admin AssignmentController but limit listing if needed later)
+        Route::get('/assignments', [\App\Http\Controllers\Admin\AssignmentController::class, 'index'])->name('teacher.assignments.index');
+        Route::get('/assignments/{assignment}/questions', [\App\Http\Controllers\Teacher\AssignmentQuestionController::class, 'index'])->name('teacher.assignments.questions.index');
+        Route::get('/assignments/{assignment}/questions/create', [\App\Http\Controllers\Teacher\AssignmentQuestionController::class, 'create'])->name('teacher.assignments.questions.create');
+        Route::post('/assignments/{assignment}/questions', [\App\Http\Controllers\Teacher\AssignmentQuestionController::class, 'store'])->name('teacher.assignments.questions.store');
+        Route::get('/assignments/{assignment}/questions/{question}/edit', [\App\Http\Controllers\Teacher\AssignmentQuestionController::class, 'edit'])->name('teacher.assignments.questions.edit');
+        Route::put('/assignments/{assignment}/questions/{question}', [\App\Http\Controllers\Teacher\AssignmentQuestionController::class, 'update'])->name('teacher.assignments.questions.update');
+        Route::delete('/assignments/{assignment}/questions/{question}', [\App\Http\Controllers\Teacher\AssignmentQuestionController::class, 'destroy'])->name('teacher.assignments.questions.destroy');
+
     // Teacher exams (CRUD limited to own subject)
     Route::get('/exams', [\App\Http\Controllers\Teacher\ExamController::class, 'index'])->name('teacher.exams.index');
     Route::get('/exams/create', [\App\Http\Controllers\Teacher\ExamController::class, 'create'])->name('teacher.exams.create');
@@ -284,6 +300,15 @@ Route::prefix('teacher')->group(function () {
 Route::prefix('operator')->group(function () {
     Route::group(['middleware' => ['auth','role:operator']], function () {
         Route::get('/dashboard', App\Http\Controllers\Operator\DashboardController::class)->name('operator.dashboard');
+
+    // Operator assignments (read & questions management)
+    Route::get('/assignments', [\App\Http\Controllers\Admin\AssignmentController::class, 'index'])->name('operator.assignments.index');
+    Route::get('/assignments/{assignment}/questions', [\App\Http\Controllers\Operator\AssignmentQuestionController::class, 'index'])->name('operator.assignments.questions.index');
+    Route::get('/assignments/{assignment}/questions/create', [\App\Http\Controllers\Operator\AssignmentQuestionController::class, 'create'])->name('operator.assignments.questions.create');
+    Route::post('/assignments/{assignment}/questions', [\App\Http\Controllers\Operator\AssignmentQuestionController::class, 'store'])->name('operator.assignments.questions.store');
+    Route::get('/assignments/{assignment}/questions/{question}/edit', [\App\Http\Controllers\Operator\AssignmentQuestionController::class, 'edit'])->name('operator.assignments.questions.edit');
+    Route::put('/assignments/{assignment}/questions/{question}', [\App\Http\Controllers\Operator\AssignmentQuestionController::class, 'update'])->name('operator.assignments.questions.update');
+    Route::delete('/assignments/{assignment}/questions/{question}', [\App\Http\Controllers\Operator\AssignmentQuestionController::class, 'destroy'])->name('operator.assignments.questions.destroy');
 
     // Operator: Exams (reuse Teacher controller)
     Route::get('/exams', [\App\Http\Controllers\Teacher\ExamController::class, 'index'])->name('operator.exams.index');
