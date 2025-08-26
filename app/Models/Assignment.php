@@ -38,4 +38,9 @@ class Assignment extends Model
     {
         return $this->belongsTo(User::class, 'created_by');
     }
+
+    public function questions()
+    {
+        return $this->hasMany(AssignmentQuestion::class)->orderBy('order')->orderBy('id');
+    }
 }

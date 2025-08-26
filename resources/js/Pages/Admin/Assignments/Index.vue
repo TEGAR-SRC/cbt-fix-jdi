@@ -33,6 +33,7 @@
                     </td>
                     <td>
                       <div class="btn-group btn-group-sm">
+                        <Link :href="`/admin/assignments/${a.id}/questions`" class="btn btn-info">Soal</Link>
                         <Link :href="`/admin/assignments/${a.id}/edit`" class="btn btn-warning">Edit</Link>
                         <Link :href="`/admin/assignments/${a.id}`" method="delete" as="button" class="btn btn-danger" preserve-scroll confirm="Hapus tugas ini?">Hapus</Link>
                       </div>
