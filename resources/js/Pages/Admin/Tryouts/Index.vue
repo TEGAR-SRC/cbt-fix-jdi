@@ -57,6 +57,9 @@
                       <span v-else class="badge bg-secondary">Draft</span>
                     </td>
                     <td class="text-center">
+                      <Link :href="`/admin/tryouts/${t.id}/questions`" class="btn btn-sm btn-primary border-0 shadow me-2" type="button" title="Soal"><i class="fa fa-plus-circle"></i></Link>
+                      <Link :href="`/admin/tryouts/${t.id}/enrollments`" class="btn btn-sm btn-warning border-0 shadow me-2 text-white" type="button" title="Enrolle"><i class="fa fa-users"></i></Link>
+                      <Link :href="`/admin/tryouts/${t.id}/results`" class="btn btn-sm btn-success border-0 shadow me-2 text-white" type="button" title="Hasil"><i class="fa fa-chart-bar"></i></Link>
                       <Link :href="`/admin/tryouts/${t.id}/edit`" class="btn btn-sm btn-info border-0 shadow me-2" type="button"><i class="fa fa-pencil-alt"></i></Link>
                       <Link :href="`/admin/tryouts/${t.id}`" method="delete" as="button" class="btn btn-sm btn-danger border-0" preserve-scroll confirm="Hapus tryout ini?"><i class="fa fa-trash"></i></Link>
                     </td>

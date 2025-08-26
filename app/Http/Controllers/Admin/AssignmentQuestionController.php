@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Assignment;
 use App\Models\AssignmentQuestion;
 use Illuminate\Http\Request;
+use App\Imports\AssignmentQuestionsImport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class AssignmentQuestionController extends Controller
 {
@@ -70,5 +72,21 @@ class AssignmentQuestionController extends Controller
     {
         $question->delete();
         return redirect()->route('admin.assignments.questions.index', $assignment)->with('success', 'Soal dihapus');
+    }
+
+    public function import(Assignment $assignment)
+    {
+        return inertia('Admin/Assignments/Questions/Import', [
+            'assignment' => $assignment
+        ]);
+    }
+
+    public function storeImport(Request $request, Assignment $assignment)
+    {
+        $request->validate([
+            'file' => 'required|mimes:csv,xls,xlsx'
+        ]);
+        Excel::import(new AssignmentQuestionsImport($assignment->id), $request->file('file'));
+        return redirect()->route('admin.assignments.questions.index', $assignment)->with('success', 'Import soal tugas berhasil');
     }
 }

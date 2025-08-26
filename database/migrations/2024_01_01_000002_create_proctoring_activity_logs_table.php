@@ -23,9 +23,10 @@ return new class extends Migration
             $table->boolean('is_violation')->default(false);
             $table->timestamps();
             
-            $table->index(['proctoring_session_id', 'activity_type']);
-            $table->index(['timestamp', 'severity']);
-            $table->index('is_violation');
+            // Use shorter explicit index names to avoid MySQL 64-char identifier limit
+            $table->index(['proctoring_session_id', 'activity_type'], 'pal_session_activity_idx');
+            $table->index(['timestamp', 'severity'], 'pal_time_severity_idx');
+            $table->index('is_violation', 'pal_is_violation_idx');
         });
     }
 

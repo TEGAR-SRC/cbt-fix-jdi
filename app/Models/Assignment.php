@@ -43,4 +43,9 @@ class Assignment extends Model
     {
         return $this->hasMany(AssignmentQuestion::class)->orderBy('order')->orderBy('id');
     }
+
+    public function enrollments()
+    {
+        return $this->hasMany(AssignmentEnrollment::class);
+    }
 }

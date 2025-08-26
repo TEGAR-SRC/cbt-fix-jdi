@@ -30,6 +30,16 @@ class Student extends Authenticatable
         return $this->belongsTo(Classroom::class);
     }
 
+    public function assignment_enrollments()
+    {
+        return $this->hasMany(AssignmentEnrollment::class);
+    }
+
+    public function tryout_enrollments()
+    {
+        return $this->hasMany(TryoutEnrollment::class);
+    }
+
     /**
      * guardians (orang tua)
      */

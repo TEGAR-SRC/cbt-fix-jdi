@@ -26,8 +26,8 @@ return new class extends Migration
             $table->text('flag_reason')->nullable();
             $table->timestamps();
             
-            $table->index(['proctoring_session_id', 'captured_at']);
-            $table->index('is_flagged');
+            $table->index(['proctoring_session_id', 'captured_at'], 'pp_session_captured_idx');
+            $table->index('is_flagged', 'pp_is_flagged_idx');
         });
     }
 

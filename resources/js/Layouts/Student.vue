@@ -5,8 +5,7 @@
                 <img class="navbar-brand-dark" src="/assets/images/logo.png" style="height:70px">
             </Link>
             <div class="collapse navbar-collapse" id="navbarCollapse">
-                <ul class="navbar-nav me-auto mb-2 mb-md-0">
-                </ul>
+                <ul class="navbar-nav me-auto mb-2 mb-md-0"></ul>
                 <form class="d-flex" v-if="$page.props.auth.student">
                     <Link href="/students/logout" method="post" class="btn btn-secondary shadow" as="button">LOGOUT</Link>
                 </form>

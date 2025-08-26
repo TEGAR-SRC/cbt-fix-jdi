@@ -12,10 +12,19 @@ class AssignmentController extends Controller
 {
     public function index(Request $request)
     {
-        $assignments = Assignment::with(['lesson','classroom','creator'])
-            ->latest()->paginate(10);
+        $assignments = Assignment::with(['lesson','classroom','creator','questions'])
+            ->when($request->q, function($query, $q) {
+                $query->where(function($sub) use ($q){
+                    $sub->where('title','like',"%$q%")
+                        ->orWhere('description','like',"%$q%");
+                });
+            })
+            ->latest()->paginate(10)->withQueryString();
         return inertia('Admin/Assignments/Index', [
             'assignments' => $assignments,
+            'filters' => [
+                'q' => $request->q,
+            ],
         ]);
     }
 

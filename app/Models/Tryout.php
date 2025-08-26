@@ -42,4 +42,14 @@ class Tryout extends Model
     {
         return $this->belongsTo(User::class, 'created_by');
     }
+
+    public function questions()
+    {
+        return $this->hasMany(TryoutQuestion::class)->orderBy('order')->orderBy('id');
+    }
+
+    public function enrollments()
+    {
+        return $this->hasMany(TryoutEnrollment::class);
+    }
 }

@@ -26,9 +26,9 @@ return new class extends Migration
             $table->text('resolution_notes')->nullable();
             $table->timestamps();
             
-            $table->index(['proctoring_session_id', 'violation_type']);
-            $table->index(['detected_at', 'severity']);
-            $table->index('auto_resolved');
+            $table->index(['proctoring_session_id', 'violation_type'], 'pv_session_type_idx');
+            $table->index(['detected_at', 'severity'], 'pv_detected_severity_idx');
+            $table->index('auto_resolved', 'pv_auto_resolved_idx');
         });
     }
 

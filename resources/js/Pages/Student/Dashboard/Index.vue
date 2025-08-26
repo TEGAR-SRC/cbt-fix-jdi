@@ -89,6 +89,65 @@
             </div>
         </div>
     </div>
+
+    <!-- Assignments Section -->
+    <div class="row mt-4" v-if="assignments.length">
+        <div class="col-md-12 mb-2"><h5 class="fw-bold">Tugas Harian</h5></div>
+        <div class="col-md-6 mb-3" v-for="a in assignments" :key="a.id">
+            <div class="card border-0 shadow h-100">
+                <div class="card-body">
+                    <h6 class="mb-1">{{ a.title }}</h6>
+                    <small class="text-muted">{{ a.lesson?.title }} • {{ a.classroom?.title }}</small>
+                    <p class="mt-2 mb-2 small" style="max-height:3.5em; overflow:hidden; white-space:pre-line;">{{ a.description }}</p>
+                    <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+                        <span class="badge bg-info" v-if="a.due_at">Deadline: {{ a.due_at }}</span>
+                        <span class="badge bg-success" v-else>Terbit</span>
+                        <template v-if="!a.submission">
+                            <Link :href="`/student/assignments/${a.id}/start`" method="post" as="button" class="btn btn-sm btn-primary">Mulai</Link>
+                        </template>
+                        <template v-else-if="!a.submission.finished_at">
+                            <Link :href="`/student/assignments/${a.id}/start`" class="btn btn-sm btn-info">Lanjut</Link>
+                            <Link :href="`/student/assignments/${a.id}/finish`" method="post" as="button" class="btn btn-sm btn-outline-danger" confirm="Selesai?">Selesai</Link>
+                        </template>
+                        <span v-else class="badge bg-secondary">Selesai ({{ a.submission.score }})</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row" v-else>
+        <div class="col-md-12"><div class="alert alert-light border-0 shadow-sm">Tidak ada tugas harian.</div></div>
+    </div>
+
+    <!-- Tryouts Section -->
+    <div class="row mt-4" v-if="tryouts.length">
+        <div class="col-md-12 mb-2"><h5 class="fw-bold">Tryout</h5></div>
+        <div class="col-md-6 mb-3" v-for="t in tryouts" :key="t.id">
+            <div class="card border-0 shadow h-100">
+                <div class="card-body">
+                    <h6 class="mb-1">{{ t.title }}</h6>
+                    <small class="text-muted">{{ t.lesson?.title }} • {{ t.classroom?.title }}</small>
+                    <p class="mt-2 mb-2 small" style="max-height:3.5em; overflow:hidden; white-space:pre-line;">{{ t.description }}</p>
+                    <div class="d-flex flex-wrap gap-2 align-items-center">
+                        <span class="badge bg-info" v-if="t.start_at">Mulai: {{ t.start_at }}</span>
+                        <span class="badge bg-secondary" v-if="t.end_at">Selesai: {{ t.end_at }}</span>
+                        <span class="badge bg-primary" v-if="t.duration_minutes">Durasi: {{ t.duration_minutes }}m</span>
+                        <template v-if="!t.attempt">
+                            <Link :href="`/student/tryouts/${t.id}/start`" method="post" as="button" class="btn btn-sm btn-primary ms-auto">Mulai</Link>
+                        </template>
+                        <template v-else-if="!t.attempt.finished_at">
+                            <Link :href="`/student/tryouts/${t.id}/start`" class="btn btn-sm btn-info ms-auto">Lanjut</Link>
+                            <Link :href="`/student/tryouts/${t.id}/finish`" method="post" as="button" class="btn btn-sm btn-outline-danger" confirm="Selesai?">Selesai</Link>
+                        </template>
+                        <span v-else class="badge bg-secondary ms-auto">Selesai ({{ t.attempt.score }})</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row" v-else>
+        <div class="col-md-12"><div class="alert alert-light border-0 shadow-sm">Tidak ada tryout.</div></div>
+    </div>
 </template>
 
 <script>
@@ -113,6 +172,8 @@
         //register props
         props: {
             exam_groups: Array,
+            assignments: Array,
+            tryouts: Array,
             auth: Object
         }
 

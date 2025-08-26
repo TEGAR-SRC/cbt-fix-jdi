@@ -22,9 +22,9 @@ return new class extends Migration
             $table->boolean('exam_paused')->default(false);
             $table->timestamps();
             
-            $table->index(['proctoring_session_id', 'connection_status']);
-            $table->index('status_changed_at');
-            $table->index('exam_paused');
+            $table->index(['proctoring_session_id', 'connection_status'], 'pnl_session_status_idx');
+            $table->index('status_changed_at', 'pnl_status_changed_at_idx');
+            $table->index('exam_paused', 'pnl_exam_paused_idx');
         });
     }
 

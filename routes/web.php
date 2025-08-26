@@ -27,9 +27,45 @@ Route::prefix('admin')->group(function() {
     Route::get('/assignments/{assignment}/questions/{question}/edit', [\App\Http\Controllers\Admin\AssignmentQuestionController::class, 'edit'])->name('admin.assignments.questions.edit');
     Route::put('/assignments/{assignment}/questions/{question}', [\App\Http\Controllers\Admin\AssignmentQuestionController::class, 'update'])->name('admin.assignments.questions.update');
     Route::delete('/assignments/{assignment}/questions/{question}', [\App\Http\Controllers\Admin\AssignmentQuestionController::class, 'destroy'])->name('admin.assignments.questions.destroy');
+    // Assignment questions import (excel)
+    Route::get('/assignments/{assignment}/questions/import', [\App\Http\Controllers\Admin\AssignmentQuestionController::class, 'import'])->name('admin.assignments.questions.import');
+    Route::post('/assignments/{assignment}/questions/import', [\App\Http\Controllers\Admin\AssignmentQuestionController::class, 'storeImport'])->name('admin.assignments.questions.storeImport');
+    // Assignment AI import
+    Route::get('/assignments/{assignment}/questions/ai-import', [\App\Http\Controllers\Admin\AssignmentAIImportController::class, 'create'])->name('admin.assignments.questions.aiImport');
+    Route::post('/assignments/{assignment}/questions/ai-import/generate', [\App\Http\Controllers\Admin\AssignmentAIImportController::class, 'generate'])->name('admin.assignments.questions.aiImportGenerate');
+    Route::post('/assignments/{assignment}/questions/ai-import/confirm', [\App\Http\Controllers\Admin\AssignmentAIImportController::class, 'confirm'])->name('admin.assignments.questions.aiImportConfirm');
     
     //route resource tryouts
     Route::resource('/tryouts', \App\Http\Controllers\Admin\TryoutController::class, ['as' => 'admin']);
+    // tryout questions
+    Route::get('/tryouts/{tryout}/questions', [\App\Http\Controllers\Admin\TryoutQuestionController::class,'index'])->name('admin.tryouts.questions.index');
+    Route::get('/tryouts/{tryout}/questions/create', [\App\Http\Controllers\Admin\TryoutQuestionController::class,'create'])->name('admin.tryouts.questions.create');
+    Route::post('/tryouts/{tryout}/questions', [\App\Http\Controllers\Admin\TryoutQuestionController::class,'store'])->name('admin.tryouts.questions.store');
+    Route::get('/tryouts/{tryout}/questions/{question}/edit', [\App\Http\Controllers\Admin\TryoutQuestionController::class,'edit'])->name('admin.tryouts.questions.edit');
+    Route::put('/tryouts/{tryout}/questions/{question}', [\App\Http\Controllers\Admin\TryoutQuestionController::class,'update'])->name('admin.tryouts.questions.update');
+    Route::delete('/tryouts/{tryout}/questions/{question}', [\App\Http\Controllers\Admin\TryoutQuestionController::class,'destroy'])->name('admin.tryouts.questions.destroy');
+    Route::get('/tryouts/{tryout}/questions/import', [\App\Http\Controllers\Admin\TryoutQuestionController::class,'import'])->name('admin.tryouts.questions.import');
+    Route::post('/tryouts/{tryout}/questions/import', [\App\Http\Controllers\Admin\TryoutQuestionController::class,'storeImport'])->name('admin.tryouts.questions.storeImport');
+    // Assignments enrollments
+    Route::get('/assignments/{assignment}/enrollments', [\App\Http\Controllers\Admin\AssignmentEnrollmentController::class,'index'])->name('admin.assignments.enrollments.index');
+    Route::get('/assignments/{assignment}/enrollments/create', [\App\Http\Controllers\Admin\AssignmentEnrollmentController::class,'create'])->name('admin.assignments.enrollments.create');
+    Route::post('/assignments/{assignment}/enrollments', [\App\Http\Controllers\Admin\AssignmentEnrollmentController::class,'store'])->name('admin.assignments.enrollments.store');
+    Route::delete('/assignments/{assignment}/enrollments/{enrollment}', [\App\Http\Controllers\Admin\AssignmentEnrollmentController::class,'destroy'])->name('admin.assignments.enrollments.destroy');
+    // Assignment results listing & detail
+    Route::get('/assignments/{assignment}/results', [\App\Http\Controllers\Admin\AssignmentResultController::class,'index'])->name('admin.assignments.results.index');
+    Route::get('/assignments/{assignment}/results/{submission}', [\App\Http\Controllers\Admin\AssignmentResultController::class,'show'])->name('admin.assignments.results.show');
+    // Tryout enrollments
+    Route::get('/tryouts/{tryout}/enrollments', [\App\Http\Controllers\Admin\TryoutEnrollmentController::class,'index'])->name('admin.tryouts.enrollments.index');
+    Route::get('/tryouts/{tryout}/enrollments/create', [\App\Http\Controllers\Admin\TryoutEnrollmentController::class,'create'])->name('admin.tryouts.enrollments.create');
+    Route::post('/tryouts/{tryout}/enrollments', [\App\Http\Controllers\Admin\TryoutEnrollmentController::class,'store'])->name('admin.tryouts.enrollments.store');
+    Route::delete('/tryouts/{tryout}/enrollments/{enrollment}', [\App\Http\Controllers\Admin\TryoutEnrollmentController::class,'destroy'])->name('admin.tryouts.enrollments.destroy');
+    // Tryout results listing & detail
+    Route::get('/tryouts/{tryout}/results', [\App\Http\Controllers\Admin\TryoutResultController::class,'index'])->name('admin.tryouts.results.index');
+    Route::get('/tryouts/{tryout}/results/{attempt}', [\App\Http\Controllers\Admin\TryoutResultController::class,'show'])->name('admin.tryouts.results.show');
+    // Tryout AI import
+    Route::get('/tryouts/{tryout}/questions/ai-import', [\App\Http\Controllers\Admin\TryoutAIImportController::class,'create'])->name('admin.tryouts.questions.aiImport');
+    Route::post('/tryouts/{tryout}/questions/ai-import/generate', [\App\Http\Controllers\Admin\TryoutAIImportController::class,'generate'])->name('admin.tryouts.questions.aiImportGenerate');
+    Route::post('/tryouts/{tryout}/questions/ai-import/confirm', [\App\Http\Controllers\Admin\TryoutAIImportController::class,'confirm'])->name('admin.tryouts.questions.aiImportConfirm');
         
     //route resource admins (manage admin users)
     Route::resource('/admins', \App\Http\Controllers\Admin\AdminController::class, ['as' => 'admin']);
@@ -98,6 +134,10 @@ Route::prefix('admin')->group(function() {
 
         //route index reports export
         Route::get('/reports/export', [\App\Http\Controllers\Admin\ReportController::class, 'export'])->name('admin.reports.export');
+
+    // unified results (Hasil Ujian) - exams, assignments, tryouts
+    Route::get('/results', [\App\Http\Controllers\Admin\UnifiedResultController::class,'index'])->name('admin.results.index');
+    Route::get('/results/export', [\App\Http\Controllers\Admin\UnifiedResultController::class,'export'])->name('admin.results.export');
 
     // settings
     Route::get('/settings', [\App\Http\Controllers\Admin\SettingController::class, 'index'])->name('admin.settings.index');
@@ -421,8 +461,24 @@ Route::prefix('student')->group(function() {
     //route exam end
         Route::post('/exam-end', [App\Http\Controllers\Student\ExamController::class, 'endExam'])->name('student.exams.endExam');
         
-        //route exam result
+    //route exam result
         Route::get('/exam-result/{exam_group_id}', [App\Http\Controllers\Student\ExamController::class, 'resultExam'])->name('student.exams.resultExam');
+
+    // Student assignments & tryouts list + play
+    Route::get('/assignments', [App\Http\Controllers\Student\AssignmentController::class, 'index'])->name('student.assignments.index');
+    Route::match(['get','post'],'/assignments/{assignment}/start', [App\Http\Controllers\Student\AssignmentPlayController::class, 'start'])->name('student.assignments.start');
+    // new per-question navigation show route (like exam UI)
+    Route::get('/assignments/{assignment}/{page}', [App\Http\Controllers\Student\AssignmentPlayController::class, 'show'])->whereNumber('page')->name('student.assignments.show');
+    // result page after finish
+    Route::get('/assignments/{assignment}/result', [App\Http\Controllers\Student\AssignmentPlayController::class, 'result'])->name('student.assignments.result');
+    Route::post('/assignments/{assignment}/answer', [App\Http\Controllers\Student\AssignmentPlayController::class, 'answer'])->name('student.assignments.answer');
+    Route::post('/assignments/{assignment}/finish', [App\Http\Controllers\Student\AssignmentPlayController::class, 'finish'])->name('student.assignments.finish');
+    Route::get('/tryouts', [App\Http\Controllers\Student\TryoutController::class, 'index'])->name('student.tryouts.index');
+    Route::match(['get','post'],'/tryouts/{tryout}/start', [App\Http\Controllers\Student\TryoutPlayController::class, 'start'])->name('student.tryouts.start');
+    Route::get('/tryouts/{tryout}/{page}', [App\Http\Controllers\Student\TryoutPlayController::class, 'show'])->whereNumber('page')->name('student.tryouts.show');
+    Route::get('/tryouts/{tryout}/result', [App\Http\Controllers\Student\TryoutPlayController::class, 'result'])->name('student.tryouts.result');
+    Route::post('/tryouts/{tryout}/answer', [App\Http\Controllers\Student\TryoutPlayController::class, 'answer'])->name('student.tryouts.answer');
+    Route::post('/tryouts/{tryout}/finish', [App\Http\Controllers\Student\TryoutPlayController::class, 'finish'])->name('student.tryouts.finish');
 
     //heartbeat endpoint for monitoring
     Route::post('/heartbeat', [App\Http\Controllers\Student\ExamController::class, 'heartbeat'])->name('student.exams.heartbeat');
