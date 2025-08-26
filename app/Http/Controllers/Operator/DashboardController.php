@@ -58,6 +58,23 @@ class DashboardController extends Controller
         $active_sessions = ExamSession::where('start_time','<=',$now)->where('end_time','>=',$now)->count();
         $ended_today = ExamSession::whereDate('end_time', $now->toDateString())->count();
 
+        // Session status distribution
+        $session_status = [
+            'upcoming' => ExamSession::where('start_time','>', $now)->count(),
+            'ongoing' => ExamSession::where('start_time','<=',$now)->where('end_time','>=',$now)->count(),
+            'ended' => ExamSession::where('end_time','<',$now)->count(),
+        ];
+
+        // 7-day activity (exams finished per day)
+        $exam_activity = [];
+        for($i=6;$i>=0;$i--) {
+            $day = Carbon::today()->subDays($i);
+            $exam_activity[] = [
+                'date' => $day->format('Y-m-d'),
+                'exams_finished' => ExamSession::whereDate('end_time',$day)->count(),
+            ];
+        }
+
         $systemStatus = [ 'database' => true, 'websocket' => false, 'anti_cheat' => true, 'storage_used' => 0.65, 'last_backup' => '—' ];
 
         return inertia('Operator/Dashboard/Index', [
@@ -71,6 +88,8 @@ class DashboardController extends Controller
             'active_sessions' => $active_sessions,
             'ended_sessions_today' => $ended_today,
             'upcoming_exams' => $upcoming,
+            'session_status' => $session_status,
+            'exam_activity' => $exam_activity,
             'system_status' => $systemStatus,
         ]);
     }

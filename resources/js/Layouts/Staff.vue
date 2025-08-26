@@ -22,21 +22,16 @@
 
 <script>
 import Sidebar from '../Components/Sidebar.vue';
-import OperatorSidebar from '../Components/OperatorSidebar.vue'
 
 export default {
-  components: { Sidebar, OperatorSidebar },
+  components: { Sidebar },
   computed: {
     basePath() {
       // Determine role prefix from current Inertia page URL
       const seg = (this.$page?.url || window.location.pathname).split('/')[1] || 'teacher'
       return `/${seg}`
     },
-    sidebarComponent() {
-      const seg = (this.$page?.url || window.location.pathname).split('/')[1]
-      if (seg === 'operator') return 'OperatorSidebar'
-      return 'Sidebar'
-    }
+  sidebarComponent() { return 'Sidebar'; }
   }
 }
 </script>

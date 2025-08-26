@@ -156,24 +156,21 @@ const groups = computed(() => {
     }
     if(role === 'operator') {
         return [
-            { key: 'operasional', label: 'Operasional Ujian', items: [
+            { key: 'ujian', label: 'Ujian & Penilaian', items: [
                 { key: 'exams', label: 'Ujian', href: '/operator/exams', icon: icons.exams },
                 { key: 'sessions', label: 'Sesi Ujian', href: '/operator/exam-sessions', icon: icons.session },
-                { key: 'assignments', label: 'Tugas', href: '/operator/assignments', icon: icons.assignment },
-                { key: 'tryouts', label: 'Tryout', href: '/operator/exams', icon: icons.tryout },
-                { key: 'reports', label: 'Laporan', href: '/operator/reports', icon: icons.reports },
+                { key: 'assignments', label: 'Tugas Harian', href: '/operator/assignments', icon: icons.assignment },
+                { key: 'questions', label: 'Bank Soal', href: '/operator/questions', icon: icons.assignment },
+                { key: 'reports', label: 'Laporan Nilai', href: '/operator/reports', icon: icons.reports },
             ]},
-            { key: 'bank', label: 'Bank Soal', items: [
-                { key: 'questions', label: 'Bank Soal', href: '/operator/questions', icon: icons.exams },
+            { key: 'monitor', label: 'Monitoring & Kontrol', items: [
+                { key: 'monitoring', label: 'Monitoring Ujian', href: '/operator/monitor', icon: icons.monitor },
+                { key: 'control', label: 'Kontrol Ujian', href: '/operator/exam-control', icon: icons.control },
             ]},
-            { key: 'data', label: 'Data', items: [
-                { key: 'students', label: 'Siswa', href: '/operator/students', icon: icons.students },
+            { key: 'master', label: 'Data Master', items: [
                 { key: 'classrooms', label: 'Kelas', href: '/operator/classrooms', icon: icons.classroom },
-                { key: 'lessons', label: 'Mapel', href: '/operator/lessons', icon: icons.lessons },
-            ]},
-            { key: 'monitor', label: 'Monitoring', items: [
-                { key: 'monitoring', label: 'Monitoring', href: '/operator/monitor', icon: icons.monitor },
-                { key: 'control', label: 'Kontrol', href: '/operator/exam-control', icon: icons.control },
+                { key: 'students', label: 'Siswa', href: '/operator/students', icon: icons.students },
+                { key: 'lessons', label: 'Mata Pelajaran', href: '/operator/lessons', icon: icons.lessons },
             ]},
         ];
     }

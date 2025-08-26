@@ -7,7 +7,7 @@
       </button>
     </div>
   </nav>
-  <OperatorSidebar />
+  <Sidebar />
   <main class="content bg-body-neo">
     <Navbar />
     <slot />
@@ -16,8 +16,8 @@
 
 <script>
 import Navbar from "../Components/Navbar.vue";
-import OperatorSidebar from '../Components/OperatorSidebar.vue';
-export default { components: { Navbar, OperatorSidebar } }
+import Sidebar from '../Components/Sidebar.vue';
+export default { components: { Navbar, Sidebar } }
 </script>
 
 <style>
