@@ -16,16 +16,23 @@
                     </Link>
                 </li>
                 <li v-for="group in groups" :key="group.key" class="mt-3">
-                    <small class="text-uppercase text-muted fw-semibold ms-2 d-block mb-1 group-label">{{ group.label }}</small>
-                    <ul class="list-unstyled mb-0">
-                        <li v-for="item in group.items" :key="item.key" class="mb-1">
-                            <Link :href="item.href" class="nav-link py-2 d-flex align-items-center rounded small" :class="[ isCurrent(item.href) ? 'active' : '' ]">
-                                <span class="sidebar-icon me-2" v-html="item.icon" />
-                                <span class="flex-grow-1">{{ item.label }}</span>
-                                <span v-if="isCurrent(item.href)" class="bullet-active"></span>
-                            </Link>
-                        </li>
-                    </ul>
+                    <button class="btn btn-sm w-100 text-start sidebar-group-toggle px-2 py-1 d-flex align-items-center" @click="toggle(group.key)">
+                        <span class="chevron me-1" :class="{ open: isOpen(group.key) }">▸</span>
+                        <span class="flex-grow-1 text-truncate group-label">{{ group.label }}</span>
+                        <span class="badge bg-primary-subtle text-white ms-2" v-if="group.items.length<10">{{ group.items.length }}</span>
+                        <span class="badge bg-warning text-dark ms-2" v-else>+{{ group.items.length }}</span>
+                    </button>
+                    <transition name="fade">
+                        <ul v-show="isOpen(group.key)" class="list-unstyled mb-0 mt-1">
+                            <li v-for="item in group.items" :key="item.key" class="mb-1">
+                                <Link :href="item.href" class="nav-link py-2 d-flex align-items-center rounded small position-relative" :class="[ isCurrent(item.href) ? 'active highlight-pulse' : '' ]">
+                                    <span class="sidebar-icon me-2" v-html="item.icon" />
+                                    <span class="flex-grow-1 text-truncate">{{ item.label }}</span>
+                                    <span v-if="isCurrent(item.href)" class="bullet-active"></span>
+                                </Link>
+                            </li>
+                        </ul>
+                    </transition>
                 </li>
                 <li class="mt-4">
                     <Link href="/logout" method="post" as="button" class="nav-link nav-link-logout d-flex align-items-center py-2 w-100">
@@ -40,7 +47,7 @@
 
 <script setup>
 import { Link, usePage } from '@inertiajs/vue3';
-import { computed } from 'vue';
+import { computed, reactive } from 'vue';
 
 const icons = {
     speedometer: '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-speedometer2"><path d="M8 4a.5.5 0 0 1 .5.5V6a.5.5 0 0 1-1 0V4.5A.5.5 0 0 1 8 4zM3.732 5.732a.5.5 0 0 1 .707 0l.915.914a.5.5 0 1 1-.708.708l-.914-.915a.5.5 0 0 1 0-.707zM2 10a.5.5 0 0 1 .5-.5h1.586a.5.5 0 0 1 0 1H2.5A.5.5 0 0 1 2 10zm9.5 0a.5.5 0 0 1 .5-.5h1.5a.5.5 0 0 1 0 1H12a.5.5 0 0 1-.5-.5zm.754-4.246a.389.389 0 0 0-.527-.02L7.547 9.31a.91.91 0 1 0 1.302 1.258l3.434-4.297a.389.389 0 0 0-.029-.518z"/><path fill-rule="evenodd" d="M0 10a8 8 0 1 1 15.547 2.661c-.442 1.253-1.845 1.602-2.932 1.25C11.309 13.488 9.475 13 8 13c-1.474 0-3.31.488-4.615.911-1.087.352-2.49.003-2.932-1.25A7.988 7.988 0 0 1 0 10zm8-7a7 7 0 0 0-6.603 9.329c.203.575.923.876 1.68.63C4.397 12.533 6.358 12 8 12s3.604.532 4.923.96c.757.245 1.477-.056 1.68-.631A7 7 0 0 0 8 3z"/></svg>',
@@ -107,6 +114,12 @@ const groups = computed(() => [
 const page = usePage();
 const isCurrent = (path) => page.url.startsWith(path);
 const isActive = (path) => isCurrent(path) ? 'active' : '';
+
+// Collapsible state with localStorage persistence
+const state = reactive({ open: JSON.parse(localStorage.getItem('sidebar.open')||'{}') });
+function toggle(key){ state.open[key] = !state.open[key]; persist(); }
+function isOpen(key){ return state.open[key] !== false; }
+function persist(){ localStorage.setItem('sidebar.open', JSON.stringify(state.open)); }
 </script>
 
 <style>
@@ -117,4 +130,15 @@ const isActive = (path) => isCurrent(path) ? 'active' : '';
 .nav-link-logout { background:#dc3545 !important; color:#fff !important; border-radius:8px; transition:.25s; }
 .nav-link-logout:hover { background:#c82333 !important; color:#fff !important; transform:translateX(2px); }
 .nav-link-logout:focus,.nav-link-logout:active { background:#bd2130 !important; box-shadow:0 0 0 0.2rem rgba(220,53,69,.25); }
+/* collapsible */
+.sidebar-group-toggle { background:rgba(255,255,255,.04); color:#e2e8f0; font-size:13px; font-weight:600; border:1px solid rgba(255,255,255,.07); border-radius:8px; transition:.2s; padding-top:.55rem!important; padding-bottom:.55rem!important; }
+.sidebar-group-toggle:hover { background:rgba(255,255,255,.1); color:#fff; }
+.group-label { font-size:13px; letter-spacing:.3px; }
+.chevron { display:inline-block; transition:transform .25s; font-size:11px; opacity:.8; }
+.chevron.open { transform:rotate(90deg); opacity:1; }
+.fade-enter-active,.fade-leave-active { transition: all .25s ease; }
+.fade-enter-from,.fade-leave-to { opacity:0; transform:translateY(-3px); }
+.highlight-pulse { position:relative; }
+.highlight-pulse::after { content:""; position:absolute; inset:0; border:1px solid rgba(13,110,253,.6); border-radius:8px; animation:pulse 2s infinite; }
+@keyframes pulse { 0%{opacity:.7} 60%{opacity:0; transform:scale(1.08);} 100%{opacity:0;} }
 </style>
