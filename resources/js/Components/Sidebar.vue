@@ -9,8 +9,8 @@
                 <span class="badge bg-secondary text-gray-800">PRO</span>
             </div>
             <ul class="nav flex-column sidebar-menu">
-                <li class="nav-item" :class="isActive('/admin/dashboard')">
-                    <Link href="/admin/dashboard" class="nav-link py-2 d-flex align-items-center">
+                <li class="nav-item" :class="isActive(dashboardPath)">
+                    <Link :href="dashboardPath" class="nav-link py-2 d-flex align-items-center">
                         <span class="sidebar-icon me-2" v-html="icons.speedometer" />
                         <span>Dashboard</span>
                     </Link>
@@ -77,26 +77,82 @@ const icons = {
 
 const userRole = computed(()=> page.props.auth?.user?.role || 'admin');
 
+// Dynamic dashboard path per role (ensures guru melihat /teacher/dashboard bukan /admin/dashboard)
+const dashboardPath = computed(()=> {
+    switch(userRole.value){
+        case 'teacher': return '/teacher/dashboard';
+        case 'operator': return '/operator/dashboard';
+        case 'dinas': return '/dinas/dashboard';
+        case 'parent': return '/parent/dashboard';
+        default: return '/admin/dashboard';
+    }
+});
+
+// Base admin groups used for admin directly and as template for teacher filtering
+function buildAdminBaseGroups(){
+    return [
+        { key: 'ujian', label: 'Ujian & Penilaian', items: [
+            { key: 'exams', label: 'Ujian', href: '/admin/exams', icon: icons.exams },
+            { key: 'sessions', label: 'Sesi Ujian', href: '/admin/exam_sessions', icon: icons.session },
+            { key: 'assignments', label: 'Tugas Harian', href: '/admin/assignments', icon: icons.assignment },
+            { key: 'tryouts', label: 'Tryout', href: '/admin/tryouts', icon: icons.tryout },
+            { key: 'results', label: 'Hasil Ujian', href: '/admin/results', icon: icons.results },
+            { key: 'reports', label: 'Laporan Nilai', href: '/admin/reports', icon: icons.reports },
+        ]},
+        { key: 'monitor', label: 'Monitoring & Proctoring', items: [
+            { key: 'monitoring', label: 'Monitoring Ujian', href: '/admin/monitor', icon: icons.monitor },
+            { key: 'control', label: 'Kontrol Ujian', href: '/admin/exam-control', icon: icons.control },
+            { key: 'proctor-sessions', label: 'Sesi Proctoring', href: '/admin/proctoring/sessions', icon: icons.proctorSession },
+            { key: 'violations', label: 'Pelanggaran', href: '/admin/proctoring/violations', icon: icons.violations },
+            { key: 'photos', label: 'Foto Proctoring', href: '/admin/proctoring/photos', icon: icons.photos },
+            { key: 'activity', label: 'Log Aktivitas', href: '/admin/proctoring/activities', icon: icons.activity },
+            { key: 'network', label: 'Status Jaringan', href: '/admin/proctoring/network', icon: icons.network },
+        ]},
+        { key: 'master', label: 'Data Master', items: [
+            { key: 'classrooms', label: 'Kelas', href: '/admin/classrooms', icon: icons.classroom },
+            { key: 'students', label: 'Siswa', href: '/admin/students', icon: icons.students },
+            { key: 'lessons', label: 'Mata Pelajaran', href: '/admin/lessons', icon: icons.lessons },
+            { key: 'guardians', label: 'Orang Tua', href: '/admin/guardians', icon: icons.guardians },
+            { key: 'admins', label: 'Pengguna', href: '/admin/admins', icon: icons.admins },
+            { key: 'add-admin', label: 'Tambah Admin', href: '/admin/admins/create', icon: icons.addAdmin },
+        ]},
+        { key: 'dinas', label: 'Dinas Pendidikan', items: [
+            { key: 'dinas-dashboard', label: 'Dashboard Dinas', href: '/admin/dinas', icon: icons.dinas },
+            { key: 'dinas-monitor', label: 'Monitoring', href: '/admin/dinas/monitor', icon: icons.activity },
+        ]},
+        { key: 'settings', label: 'Pengaturan', items: [
+            { key: 'settings', label: 'Pengaturan', href: '/admin/settings', icon: icons.settings },
+            { key: 'proctor-settings', label: 'Proctoring', href: '/admin/proctoring/settings', icon: icons.settings },
+        ]},
+    ];
+}
+
 const groups = computed(() => {
     const role = userRole.value;
     if(role === 'teacher') {
-        return [
-            { key: 'ujian', label: 'Ujian & Penilaian', items: [
-                { key: 'exams', label: 'Ujian', href: '/teacher/exams', icon: icons.exams },
-                { key: 'sessions', label: 'Sesi Ujian', href: '/teacher/exam-sessions', icon: icons.session },
-                { key: 'assignments', label: 'Tugas Harian', href: '/teacher/assignments', icon: icons.assignment },
-                { key: 'questions', label: 'Bank Soal', href: '/teacher/questions', icon: icons.assignment },
-                { key: 'reports', label: 'Laporan Nilai', href: '/teacher/reports', icon: icons.reports },
-            ]},
-            { key: 'monitor', label: 'Monitoring & Kontrol', items: [
-                { key: 'monitoring', label: 'Monitoring Ujian', href: '/teacher/monitor', icon: icons.monitor },
-                { key: 'control', label: 'Kontrol Ujian', href: '/teacher/exam-control', icon: icons.control },
-            ]},
-            { key: 'master', label: 'Data Master', items: [
-                { key: 'classrooms', label: 'Kelas', href: '/teacher/classrooms', icon: icons.classroom },
-                { key: 'students', label: 'Siswa', href: '/teacher/students', icon: icons.students },
-            ]},
-        ];
+        const allowed = new Set(['exams','sessions','assignments','questions','reports','monitoring','control','classrooms','students']);
+        const teacherRouteMap = {
+            exams: '/teacher/exams',
+            sessions: '/teacher/exam-sessions', // note admin uses underscore variant
+            assignments: '/teacher/assignments',
+            questions: '/teacher/questions',
+            reports: '/teacher/reports',
+            monitoring: '/teacher/monitor',
+            control: '/teacher/exam-control',
+            classrooms: '/teacher/classrooms',
+            students: '/teacher/students',
+        };
+        return buildAdminBaseGroups()
+            .map(g => {
+                // clone & filter items
+                const items = g.items.filter(it => allowed.has(it.key)).map(it => ({...it, href: teacherRouteMap[it.key] || it.href}));
+                if(g.key === 'monitor') {
+                    return { ...g, label: 'Monitoring & Kontrol', items };
+                }
+                return { ...g, items };
+            })
+            .filter(g => g.items.length > 0) // drop empty groups (dinas, settings, etc.)
+            .filter(g => ['ujian','monitor','master'].includes(g.key)); // only keep main three
     }
     if(role === 'operator') {
         return [
@@ -137,41 +193,7 @@ const groups = computed(() => {
         ];
     }
     // default admin
-    return [
-        { key: 'ujian', label: 'Ujian & Penilaian', items: [
-            { key: 'exams', label: 'Ujian', href: '/admin/exams', icon: icons.exams },
-            { key: 'sessions', label: 'Sesi Ujian', href: '/admin/exam_sessions', icon: icons.session },
-            { key: 'assignments', label: 'Tugas Harian', href: '/admin/assignments', icon: icons.assignment },
-            { key: 'tryouts', label: 'Tryout', href: '/admin/tryouts', icon: icons.tryout },
-            { key: 'results', label: 'Hasil Ujian', href: '/admin/results', icon: icons.results },
-            { key: 'reports', label: 'Laporan Nilai', href: '/admin/reports', icon: icons.reports },
-        ]},
-        { key: 'monitor', label: 'Monitoring & Proctoring', items: [
-            { key: 'monitoring', label: 'Monitoring Ujian', href: '/admin/monitor', icon: icons.monitor },
-            { key: 'control', label: 'Kontrol Ujian', href: '/admin/exam-control', icon: icons.control },
-            { key: 'proctor-sessions', label: 'Sesi Proctoring', href: '/admin/proctoring/sessions', icon: icons.proctorSession },
-            { key: 'violations', label: 'Pelanggaran', href: '/admin/proctoring/violations', icon: icons.violations },
-            { key: 'photos', label: 'Foto Proctoring', href: '/admin/proctoring/photos', icon: icons.photos },
-            { key: 'activity', label: 'Log Aktivitas', href: '/admin/proctoring/activities', icon: icons.activity },
-            { key: 'network', label: 'Status Jaringan', href: '/admin/proctoring/network', icon: icons.network },
-        ]},
-        { key: 'master', label: 'Data Master', items: [
-            { key: 'classrooms', label: 'Kelas', href: '/admin/classrooms', icon: icons.classroom },
-            { key: 'students', label: 'Siswa', href: '/admin/students', icon: icons.students },
-            { key: 'lessons', label: 'Mata Pelajaran', href: '/admin/lessons', icon: icons.lessons },
-            { key: 'guardians', label: 'Orang Tua', href: '/admin/guardians', icon: icons.guardians },
-            { key: 'admins', label: 'Pengguna', href: '/admin/admins', icon: icons.admins },
-            { key: 'add-admin', label: 'Tambah Admin', href: '/admin/admins/create', icon: icons.addAdmin },
-        ]},
-        { key: 'dinas', label: 'Dinas Pendidikan', items: [
-            { key: 'dinas-dashboard', label: 'Dashboard Dinas', href: '/admin/dinas', icon: icons.dinas },
-            { key: 'dinas-monitor', label: 'Monitoring', href: '/admin/dinas/monitor', icon: icons.activity },
-        ]},
-        { key: 'settings', label: 'Pengaturan', items: [
-            { key: 'settings', label: 'Pengaturan', href: '/admin/settings', icon: icons.settings },
-            { key: 'proctor-settings', label: 'Proctoring', href: '/admin/proctoring/settings', icon: icons.settings },
-        ]},
-    ];
+    return buildAdminBaseGroups();
 });
 
 const page = usePage();

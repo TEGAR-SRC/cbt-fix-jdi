@@ -13,7 +13,7 @@
         </div>
     </nav>
 
-    <TeacherSidebar />
+    <Sidebar />
 
     <main class="content bg-body-neo">
         <slot />
@@ -21,8 +21,8 @@
 </template>
 
 <script>
-import TeacherSidebar from '../Components/TeacherSidebar.vue'
-export default { components: { TeacherSidebar } }
+import Sidebar from '../Components/Sidebar.vue';
+export default { components: { Sidebar } }
 </script>
 
 <style>
