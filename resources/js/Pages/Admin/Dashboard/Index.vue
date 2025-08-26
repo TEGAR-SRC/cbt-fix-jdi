@@ -114,7 +114,7 @@
                                 <h6 class="mb-0">Status Sesi</h6>
                                 <small class="text-muted">Aktif vs Selesai</small>
                             </div>
-                            <div class="card-body"><canvas id="sessionStatusChart" height="150"></canvas></div>
+                            <div class="card-body"><canvas id="sessionStatusChart" height="110" style="max-height:110px"></canvas></div>
                         </div>
                     </div>
                     <div class="col-12" v-if="liveSystemStatus">
@@ -276,11 +276,14 @@ export default {
             if(sessionChartMade) return;
             nextTick(() => {
                 const el = document.getElementById('sessionStatusChart');
-                if(!el) return;
-                const active = props.session_status?.active ?? placeholderRandom(1, 5, 20)[0];
-                const ended = props.session_status?.ended ?? placeholderRandom(1, 5, 20)[0];
-                new Chart(el.getContext('2d'), { type:'doughnut', data:{ labels:['Aktif','Selesai'], datasets:[{ data:[active, ended], backgroundColor:['#ffc107','#198754'] }] }, options:{ cutout:'65%', plugins:{ legend:{ position:'bottom'} } } });
-                sessionChartMade = true;
+                if(el && !sessionChartMade){
+                    sessionChartMade = true;
+                    new Chart(el.getContext('2d'), {
+                        type:'doughnut',
+                        data:{ labels:['Upcoming','Ongoing','Ended'], datasets:[{ data:[props.session_status.upcoming, props.session_status.ongoing, props.session_status.ended], backgroundColor:['#0d6efd','#198754','#6c757d'], borderWidth:1 }] },
+                        options:{ maintainAspectRatio:false, cutout:'62%', plugins:{ legend:{ display:false } } }
+                    });
+                }
             });
         }
 
