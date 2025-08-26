@@ -13,9 +13,16 @@ class TryoutController extends Controller
     public function index(Request $request)
     {
         $tryouts = Tryout::with(['lesson','classroom','creator'])
-            ->latest()->paginate(10);
+            ->when($request->q, function($query, $q){
+                $query->where(function($sub) use ($q){
+                    $sub->where('title','like',"%$q%")
+                        ->orWhere('description','like',"%$q%");
+                });
+            })
+            ->latest()->paginate(10)->withQueryString();
         return inertia('Admin/Tryouts/Index', [
             'tryouts' => $tryouts,
+            'filters' => [ 'q' => $request->q ],
         ]);
     }
 
