@@ -82,8 +82,8 @@ const dashboardPath = computed(()=> {
     switch(userRole.value){
         case 'teacher': return '/teacher/dashboard';
         case 'operator': return '/operator/dashboard';
-        case 'dinas': return '/dinas/dashboard';
-        case 'parent': return '/parent/dashboard';
+    case 'dinas': return '/dinas/dashboard';
+    case 'parent': return '/parent/grades';
         default: return '/admin/dashboard';
     }
 });
@@ -185,7 +185,7 @@ const groups = computed(() => {
     if(role === 'parent') {
         return [
             { key: 'nilai', label: 'Nilai Anak', items: [
-                { key: 'grades', label: 'Nilai', href: '/parent/grades', icon: icons.reports },
+                { key: 'grades', label: 'Nilai Anak', href: '/parent/grades', icon: icons.reports },
             ]},
         ];
     }
