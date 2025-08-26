@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Setting;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\File;
 use Inertia\Inertia;
 
 class SettingController extends Controller
@@ -33,15 +33,27 @@ class SettingController extends Controller
             'site_name' => 'required|string|max:255',
             'cbt_name' => 'required|string|max:255',
             'logo' => 'nullable|image|max:2048',
+            'remove_logo' => 'nullable|boolean'
         ]);
 
         $this->saveSetting('site_name', $data['site_name']);
         $this->saveSetting('cbt_name', $data['cbt_name']);
 
-        if ($request->hasFile('logo')) {
-            $path = $request->file('logo')->store('public/logos');
-            $url = Storage::url($path);
-            $this->saveSetting('school_logo', $url);
+        if ($request->boolean('remove_logo')) {
+            $this->saveSetting('school_logo', null);
+        } elseif ($request->hasFile('logo')) {
+            // Simpler: simpan langsung ke public/uploads agar langsung bisa diakses
+            $file = $request->file('logo');
+            File::ensureDirectoryExists(public_path('uploads'));
+            $name = 'logo_'.time().'.'.$file->getClientOriginalExtension();
+            $file->move(public_path('uploads'), $name);
+            $publicPath = '/uploads/'.$name; // langsung bisa dipakai oleh browser
+            $this->saveSetting('school_logo', $publicPath);
+            $this->saveSetting('logo_cache_bust', time());
+        }
+
+        if (!$request->hasFile('logo') && !$request->boolean('remove_logo')) {
+            \Log::info('Settings update: no logo file received', [ 'fields' => array_keys($request->all()) ]);
         }
 
         return back()->with('success', 'Settings saved');

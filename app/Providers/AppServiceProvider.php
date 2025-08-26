@@ -26,9 +26,12 @@ class AppServiceProvider extends ServiceProvider
                 'site_name' => 'CBT AI',
                 'cbt_name' => 'Ujian Online',
                 'school_logo' => null,
+                'logo_cache_bust' => null,
             ];
             $db = Setting::query()->pluck('value', 'key')->toArray();
-            return array_merge($defaults, $db);
+            $branding = array_merge($defaults, $db);
+                // Debug log removed for production cleanliness.
+            return $branding;
         });
 
         // Share authenticated user basic data (role, name, subject) for role-based UI (sidebar, dashboards)

@@ -77,7 +77,19 @@ const icons = {
 const userRole = computed(()=> page.props.auth?.user?.role || 'admin');
 // dynamic brand name (sidebar title) using cbt_name > site_name > fallback
 const brandName = computed(()=> (page.props.branding?.cbt_name || page.props.branding?.site_name || 'CBT').trim());
-const brandLogo = computed(()=> page.props.branding?.school_logo || '/assets/images/logo.png');
+const brandLogo = computed(()=> {
+    let base = page.props.branding?.school_logo || '';
+    // If backend generated //localhost/storage path adjust to current host
+    if(base && base.startsWith('/storage/')){
+        base = `${window.location.origin}${base}`;
+    }
+    if(!base){
+        // ultimate minimal fallback (1x1 transparent) kalau belum ada logo
+        base = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==';
+    }
+    const bust = page.props.branding?.logo_cache_bust;
+    return bust && base.includes('/storage/') ? `${base}?v=${bust}` : base;
+});
 let logoErrored = false;
 function logoError(e){
     if(!logoErrored){
