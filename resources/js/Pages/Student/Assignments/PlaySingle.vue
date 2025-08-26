@@ -68,6 +68,33 @@ export default { layout: LayoutStudent, components:{Head}, props:{ assignment:Ob
   const btnClass=(ans)=> question_activeAnswer()==ans? 'btn-info':'btn-outline-info';
   const numberBtnClass=(i)=> { const active = (i+1)==props.page; const answered = (props.all_questions[i]?.answer||0) !== 0; return active? 'btn-gray-400': (answered? 'btn-info':'btn-outline-info'); };
   const finishConfirm=()=>{ Swal.fire({title:'Selesai?', text:'Yakin selesai?', icon:'warning', showCancelButton:true, confirmButtonText:'Ya'}).then(r=>{ if(r.isConfirmed){ router.post(`/student/assignments/${props.assignment.id}/finish`); } }); };
+  // Prevent accidental exit; if user closes/tab hides we can optionally auto-finish.
+  const beforeUnload = (e)=> {
+    if(!props.submission.finished_at){
+      e.preventDefault();
+      e.returnValue='';
+    }
+  };
+  window.addEventListener('beforeunload', beforeUnload);
+  const visibilityHandler = () => {
+    if(document.hidden && !props.submission.finished_at){
+      // mark exit but don't finish; send beacon to set status exited
+      try {
+        const url = `/student/assignments/${props.assignment.id}/exit`;
+        if(navigator.sendBeacon){ navigator.sendBeacon(url, new Blob([], {type:'application/json'})); }
+        else { fetch(url,{method:'POST', headers:{'X-CSRF-TOKEN':document.querySelector('meta[name="csrf-token"]').getAttribute('content')}}); }
+      } catch(e){}
+    }
+  };
+  const pageHideHandler = () => { if(!props.submission.finished_at){ visibilityHandler(); } };
+  window.addEventListener('pagehide', pageHideHandler);
+  document.addEventListener('visibilitychange', visibilityHandler);
+  // cleanup when leaving via Inertia
+  router.on('finish', () => {
+    window.removeEventListener('beforeunload', beforeUnload);
+    document.removeEventListener('visibilitychange', visibilityHandler);
+  window.removeEventListener('pagehide', pageHideHandler);
+  });
   return { options, goto, submitAnswer, btnClass, numberBtnClass, finishConfirm, question_activeAnswer };
  } };
 </script>

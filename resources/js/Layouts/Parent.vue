@@ -7,7 +7,7 @@
       </button>
     </div>
   </nav>
-  <ParentSidebar />
+  <Sidebar />
   <main class="content bg-body-neo">
     <Navbar />
     <slot />
@@ -16,8 +16,8 @@
 
 <script>
 import Navbar from "../Components/Navbar.vue";
-import ParentSidebar from '../Components/ParentSidebar.vue';
-export default { components: { Navbar, ParentSidebar } }
+import Sidebar from '../Components/Sidebar.vue';
+export default { components: { Navbar, Sidebar } }
 </script>
 
 <style>

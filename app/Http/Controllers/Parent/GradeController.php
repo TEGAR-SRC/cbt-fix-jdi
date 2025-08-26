@@ -38,11 +38,15 @@ class GradeController extends Controller
                 }
             }
 
+            // summary metrics
+            $summary = $this->buildSummary($grades);
+
             return inertia('Parent/Grades/Index', [
                 'students' => $students,
                 'grades' => $grades,
                 'selected_student' => null,
                 'is_parent' => true,
+                'summary' => $summary,
             ]);
         }
 
@@ -52,6 +56,7 @@ class GradeController extends Controller
             'grades' => [],
             'selected_student' => null,
             'is_parent' => false,
+            'summary' => $this->emptySummary(),
         ]);
     }
 
@@ -86,6 +91,44 @@ class GradeController extends Controller
             'grades' => $grades,
             'selected_student' => $student?->id,
             'not_found' => $student ? null : 'Siswa dengan NIS tersebut tidak ditemukan',
+            'summary' => $this->buildSummary($grades),
         ]);
+    }
+
+    private function buildSummary($grades)
+    {
+        $total = count($grades);
+        if ($total === 0) return $this->emptySummary();
+        $avg = round(collect($grades)->avg('grade'),2);
+        $best = collect($grades)->max('grade');
+        $worst = collect($grades)->min('grade');
+        $distribution = [
+            '>=90' => 0,
+            '80-89' => 0,
+            '70-79' => 0,
+            '60-69' => 0,
+            '<60' => 0,
+        ];
+        foreach($grades as $g){
+            $val = $g->grade;
+            if($val >= 90) $distribution['>=90']++; elseif($val >=80) $distribution['80-89']++; elseif($val>=70) $distribution['70-79']++; elseif($val>=60) $distribution['60-69']++; else $distribution['<60']++;        }
+        return [
+            'count' => $total,
+            'average' => $avg,
+            'best' => $best,
+            'worst' => $worst,
+            'distribution' => $distribution,
+        ];
+    }
+
+    private function emptySummary()
+    {
+        return [
+            'count' => 0,
+            'average' => 0,
+            'best' => 0,
+            'worst' => 0,
+            'distribution' => [ '>=90'=>0,'80-89'=>0,'70-79'=>0,'60-69'=>0,'<60'=>0 ],
+        ];
     }
 }

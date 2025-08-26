@@ -3,6 +3,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\{Assignment,AssignmentSubmission,AssignmentAnswer,Student};
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 
 class AssignmentResultController extends Controller
 {
@@ -28,4 +29,34 @@ class AssignmentResultController extends Controller
         return inertia('Admin/Assignments/Results/Show',[ 'assignment'=>$assignment, 'submission'=>$submission, 'answers'=>$answers ]);
     }
     protected function authorizeView(){ /* placeholder for role checks if needed later */ }
+
+    // Force stop an ongoing submission (mark finished now)
+    public function forceFinish(Assignment $assignment, AssignmentSubmission $submission)
+    {
+        $this->authorizeView();
+        abort_unless($submission->assignment_id == $assignment->id,404);
+        if(!$submission->finished_at){
+            $submission->finished_at = now();
+            // Recalculate score (in case some answers missing)
+            $total = $submission->total_questions ?: $assignment->questions()->count();
+            $correct = $submission->answers()->where('is_correct',true)->count();
+            $submission->total_questions = $total;
+            $submission->total_correct = $correct;
+            $submission->score = $total ? round(($correct/$total)*100,2) : 0;
+            $submission->save();
+        }
+        return back()->with('success','Tugas harian dihentikan & diselesaikan.');
+    }
+
+    // Reopen a finished submission (allow student to continue)
+    public function reopen(Assignment $assignment, AssignmentSubmission $submission)
+    {
+        $this->authorizeView();
+        abort_unless($submission->assignment_id == $assignment->id,404);
+        if($submission->finished_at){
+            $submission->finished_at = null;
+            $submission->save();
+        }
+        return back()->with('success','Tugas harian dibuka kembali.');
+    }
 }

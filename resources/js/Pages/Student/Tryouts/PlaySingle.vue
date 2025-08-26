@@ -64,6 +64,27 @@ export default { layout: LayoutStudent, components:{Head}, props:{ tryout:Object
   const btnClass=(ans)=> question_activeAnswer()==ans? 'btn-info':'btn-outline-info';
   const numberBtnClass=(i)=> { const active = (i+1)==props.page; const answered = (props.all_questions[i]?.answer||0) !== 0; return active? 'btn-gray-400': (answered? 'btn-info':'btn-outline-info'); };
   const finishConfirm=()=>{ Swal.fire({title:'Selesai?', text:'Yakin selesai?', icon:'warning', showCancelButton:true, confirmButtonText:'Ya'}).then(r=>{ if(r.isConfirmed){ router.post(`/student/tryouts/${props.tryout.id}/finish`); } }); };
+  const beforeUnload = (e)=> {
+    if(!props.attempt.finished_at){ e.preventDefault(); e.returnValue=''; }
+  };
+  window.addEventListener('beforeunload', beforeUnload);
+  const visibilityHandler = () => {
+    if(document.hidden && !props.attempt.finished_at){
+      try {
+        const url = `/student/tryouts/${props.tryout.id}/exit`;
+        if(navigator.sendBeacon){ navigator.sendBeacon(url, new Blob([], {type:'application/json'})); }
+        else { fetch(url, { method:'POST', headers:{'X-CSRF-TOKEN':document.querySelector('meta[name="csrf-token"]').getAttribute('content') }}); }
+      } catch(e){}
+    }
+  };
+  const pageHideHandler = () => { if(!props.attempt.finished_at){ visibilityHandler(); } };
+  window.addEventListener('pagehide', pageHideHandler);
+  document.addEventListener('visibilitychange', visibilityHandler);
+  router.on('finish', () => {
+    window.removeEventListener('beforeunload', beforeUnload);
+    document.removeEventListener('visibilitychange', visibilityHandler);
+  window.removeEventListener('pagehide', pageHideHandler);
+  });
   return { options, goto, submitAnswer, btnClass, numberBtnClass, finishConfirm, question_activeAnswer };
  } };
 </script>

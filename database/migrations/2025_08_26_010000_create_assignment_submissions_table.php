@@ -16,6 +16,7 @@ return new class extends Migration {
             $table->unsignedInteger('total_correct')->default(0);
             $table->unsignedInteger('total_questions')->default(0);
             $table->decimal('score',5,2)->default(0);
+            $table->string('status',20)->nullable();
             $table->timestamps();
             $table->unique(['assignment_id','student_id'],'asgmt_sub_unique');
         });

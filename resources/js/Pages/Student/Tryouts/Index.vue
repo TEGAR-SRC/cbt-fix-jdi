@@ -21,7 +21,7 @@
           <div class="d-flex justify-content-between align-items-center mt-2">
             <span class="badge bg-info" v-if="t.start_at">Mulai: {{ t.start_at }}</span>
             <span class="badge bg-secondary" v-if="t.end_at">Selesai: {{ t.end_at }}</span>
-            <button class="btn btn-sm btn-outline-primary" disabled>Detail</button>
+            <Link :href="`/student/tryouts/${t.id}/confirmation`" class="btn btn-sm btn-success text-white">Kerjakan</Link>
           </div>
         </div>
       </div>
@@ -31,8 +31,8 @@
 </template>
 <script>
 import LayoutStudent from '../../../Layouts/Student.vue';
-import { Head, router } from '@inertiajs/vue3';
+import { Head, router, Link } from '@inertiajs/vue3';
 import { reactive } from 'vue';
-export default { layout: LayoutStudent, components:{Head}, props:{ tryouts:Array, filters:Object }, setup(props){ const form=reactive({ q: props.filters?.q||'' }); const search=()=>{ router.get('/student/tryouts', { q: form.q }, { preserveState:true, replace:true }); }; return { form, search }; } }
+export default { layout: LayoutStudent, components:{Head,Link}, props:{ tryouts:Array, filters:Object }, setup(props){ const form=reactive({ q: props.filters?.q||'' }); const search=()=>{ router.get('/student/tryouts', { q: form.q }, { preserveState:true, replace:true }); }; return { form, search }; } }
 </script>
 <style></style>

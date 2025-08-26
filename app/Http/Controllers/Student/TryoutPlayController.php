@@ -6,6 +6,13 @@ use Illuminate\Http\Request;
 
 class TryoutPlayController extends Controller
 {
+    public function confirmation(Tryout $tryout)
+    {
+        $student = auth()->guard('student')->user();
+        abort_unless($tryout->classroom_id === $student->classroom_id, 403);
+        $attempt = TryoutAttempt::where('tryout_id',$tryout->id)->where('student_id',$student->id)->first();
+        return inertia('Student/Tryouts/Confirmation',[ 'tryout'=>$tryout, 'attempt'=>$attempt ]);
+    }
     public function start(Tryout $tryout)
     {
         $student = auth()->guard('student')->user();
@@ -28,6 +35,12 @@ class TryoutPlayController extends Controller
         if(!$attempt){
             return redirect()->route('student.tryouts.start',$tryout->id);
         }
+            if($attempt->finished_at){
+                return redirect()->route('student.tryouts.result',$tryout->id);
+            }
+            if($attempt->status === 'exited'){
+                return redirect()->route('student.tryouts.confirmation',$tryout->id)->with('error','Sesi sebelumnya terdeteksi keluar. Hubungi operator untuk membuka kembali.');
+            }
         $allQuestions = $tryout->questions()->orderBy('order')->get();
         $answers = TryoutAnswer::where('attempt_id',$attempt->id)->get()->keyBy('tryout_question_id');
         $index = $page - 1;
@@ -74,6 +87,26 @@ class TryoutPlayController extends Controller
         if(!$attempt->finished_at){ $attempt->finished_at = now(); $attempt->save(); }
         return redirect()->route('student.tryouts.result', $tryout->id);
     }
+        public function abort(Tryout $tryout)
+        {
+            $student = auth()->guard('student')->user();
+            $attempt = TryoutAttempt::where('tryout_id',$tryout->id)->where('student_id',$student->id)->first();
+            if($attempt && !$attempt->finished_at){
+                $attempt->status = 'exited';
+                $attempt->save();
+            }
+            return response()->json(['status'=>'ok']);
+        }
+        public function exit(Tryout $tryout)
+        {
+            $student = auth()->guard('student')->user();
+            $attempt = TryoutAttempt::where('tryout_id',$tryout->id)->where('student_id',$student->id)->first();
+            if($attempt && !$attempt->finished_at){
+                $attempt->status = 'exited';
+                $attempt->save();
+            }
+            return response()->json(['status'=>'ok']);
+        }
     public function result(Tryout $tryout)
     {
         $student = auth()->guard('student')->user();

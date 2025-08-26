@@ -3,6 +3,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\{Tryout,TryoutAttempt,TryoutAnswer};
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 
 class TryoutResultController extends Controller
 {
@@ -24,5 +25,30 @@ class TryoutResultController extends Controller
         $attempt->load('student');
         $answers = TryoutAnswer::with('question')->where('attempt_id',$attempt->id)->get();
         return inertia('Admin/Tryouts/Results/Show',[ 'tryout'=>$tryout, 'attempt'=>$attempt, 'answers'=>$answers ]);
+    }
+
+    public function forceFinish(Tryout $tryout, TryoutAttempt $attempt)
+    {
+        abort_unless($attempt->tryout_id == $tryout->id,404);
+        if(!$attempt->finished_at){
+            $attempt->finished_at = now();
+            $total = $attempt->total_questions ?: $tryout->questions()->count();
+            $correct = $attempt->answers()->where('is_correct',true)->count();
+            $attempt->total_questions = $total;
+            $attempt->total_correct = $correct;
+            $attempt->score = $total ? round(($correct/$total)*100,2) : 0;
+            $attempt->save();
+        }
+        return back()->with('success','Tryout dihentikan & diselesaikan.');
+    }
+
+    public function reopen(Tryout $tryout, TryoutAttempt $attempt)
+    {
+        abort_unless($attempt->tryout_id == $tryout->id,404);
+        if($attempt->finished_at){
+            $attempt->finished_at = null;
+            $attempt->save();
+        }
+        return back()->with('success','Tryout dibuka kembali.');
     }
 }

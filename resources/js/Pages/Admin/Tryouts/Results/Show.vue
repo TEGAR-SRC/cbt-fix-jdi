@@ -8,7 +8,11 @@
       <div class="row mb-2"><div class="col-md-3 text-muted">Mulai</div><div class="col-md-9">{{ attempt.started_at ? new Date(attempt.started_at).toLocaleString() : '-' }}</div></div>
       <div class="row mb-2"><div class="col-md-3 text-muted">Selesai</div><div class="col-md-9">{{ attempt.finished_at ? new Date(attempt.finished_at).toLocaleString() : '-' }}</div></div>
       <div class="row mb-2"><div class="col-md-3 text-muted">Benar</div><div class="col-md-9">{{ attempt.total_correct }}/{{ attempt.total_questions }}</div></div>
-      <div class="row mb-2"><div class="col-md-3 text-muted">Skor</div><div class="col-md-9 fw-bold">{{ attempt.score }}</div></div>
+      <div class="row mb-3"><div class="col-md-3 text-muted">Skor</div><div class="col-md-9 fw-bold">{{ attempt.score }}</div></div>
+      <div class="d-flex gap-2">
+        <Link v-if="!attempt.finished_at" as="button" method="post" :href="`/admin/tryouts/${tryout.id}/results/${attempt.id}/force-finish`" class="btn btn-sm btn-danger" onclick="return confirm('Hentikan & selesaikan sekarang?')">Hentikan</Link>
+        <Link v-else as="button" method="post" :href="`/admin/tryouts/${tryout.id}/results/${attempt.id}/reopen`" class="btn btn-sm btn-warning" onclick="return confirm('Buka kembali attempt ini?')">Buka Kembali</Link>
+      </div>
     </div>
   </div>
   <div class="card border-0 shadow">

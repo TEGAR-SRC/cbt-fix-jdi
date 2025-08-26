@@ -7,6 +7,13 @@ use Illuminate\Support\Carbon;
 
 class AssignmentPlayController extends Controller
 {
+    public function confirmation(Assignment $assignment)
+    {
+        $student = auth()->guard('student')->user();
+        abort_unless($assignment->classroom_id === $student->classroom_id, 403);
+        $submission = AssignmentSubmission::where('assignment_id',$assignment->id)->where('student_id',$student->id)->first();
+        return inertia('Student/Assignments/Confirmation',[ 'assignment'=>$assignment, 'submission'=>$submission ]);
+    }
     public function start(Assignment $assignment)
     {
         $student = auth()->guard('student')->user();
@@ -29,6 +36,14 @@ class AssignmentPlayController extends Controller
         $submission = AssignmentSubmission::where('assignment_id',$assignment->id)->where('student_id',$student->id)->first();
         if(!$submission){
             return redirect()->route('student.assignments.start',$assignment->id);
+        }
+        // Jika sudah selesai (baik normal maupun dipaksa selesai), langsung arahkan ke result
+        if($submission->finished_at){
+            return redirect()->route('student.assignments.result', $assignment->id);
+        }
+        // Jika status exited, arahkan ke confirmation page
+        if($submission->status === 'exited'){
+            return redirect()->route('student.assignments.confirmation', $assignment->id)->with('error','Sesi sebelumnya terdeteksi keluar. Hubungi operator untuk membuka kembali.');
         }
         $allQuestions = $assignment->questions()->orderBy('order')->get();
         $answers = AssignmentAnswer::where('submission_id',$submission->id)->get()->keyBy('assignment_question_id');
@@ -78,6 +93,28 @@ class AssignmentPlayController extends Controller
         $submission = AssignmentSubmission::where('assignment_id',$assignment->id)->where('student_id',$student->id)->firstOrFail();
         if(!$submission->finished_at){ $submission->finished_at = now(); $submission->save(); }
         return redirect()->route('student.assignments.result', $assignment->id);
+    }
+    // Abort endpoint dipanggil saat tab/halaman ditutup (sendBeacon)
+    public function abort(Assignment $assignment)
+    {
+        $student = auth()->guard('student')->user();
+        $submission = AssignmentSubmission::where('assignment_id',$assignment->id)->where('student_id',$student->id)->first();
+        if($submission && !$submission->finished_at){
+            $submission->status = 'exited';
+            $submission->save();
+        }
+        return response()->json(['status'=>'ok']);
+    }
+    // explicit exit (no finish)
+    public function exit(Assignment $assignment)
+    {
+        $student = auth()->guard('student')->user();
+        $submission = AssignmentSubmission::where('assignment_id',$assignment->id)->where('student_id',$student->id)->first();
+        if($submission && !$submission->finished_at){
+            $submission->status = 'exited';
+            $submission->save();
+        }
+        return response()->json(['status'=>'ok']);
     }
     public function result(Assignment $assignment)
     {

@@ -56,6 +56,8 @@ Route::prefix('admin')->group(function() {
     // Assignment results listing & detail
     Route::get('/assignments/{assignment}/results', [\App\Http\Controllers\Admin\AssignmentResultController::class,'index'])->name('admin.assignments.results.index');
     Route::get('/assignments/{assignment}/results/{submission}', [\App\Http\Controllers\Admin\AssignmentResultController::class,'show'])->name('admin.assignments.results.show');
+    Route::post('/assignments/{assignment}/results/{submission}/force-finish', [\App\Http\Controllers\Admin\AssignmentResultController::class,'forceFinish'])->name('admin.assignments.results.force_finish');
+    Route::post('/assignments/{assignment}/results/{submission}/reopen', [\App\Http\Controllers\Admin\AssignmentResultController::class,'reopen'])->name('admin.assignments.results.reopen');
     // Tryout enrollments
     Route::get('/tryouts/{tryout}/enrollments', [\App\Http\Controllers\Admin\TryoutEnrollmentController::class,'index'])->name('admin.tryouts.enrollments.index');
     Route::get('/tryouts/{tryout}/enrollments/create', [\App\Http\Controllers\Admin\TryoutEnrollmentController::class,'create'])->name('admin.tryouts.enrollments.create');
@@ -64,6 +66,8 @@ Route::prefix('admin')->group(function() {
     // Tryout results listing & detail
     Route::get('/tryouts/{tryout}/results', [\App\Http\Controllers\Admin\TryoutResultController::class,'index'])->name('admin.tryouts.results.index');
     Route::get('/tryouts/{tryout}/results/{attempt}', [\App\Http\Controllers\Admin\TryoutResultController::class,'show'])->name('admin.tryouts.results.show');
+    Route::post('/tryouts/{tryout}/results/{attempt}/force-finish', [\App\Http\Controllers\Admin\TryoutResultController::class,'forceFinish'])->name('admin.tryouts.results.force_finish');
+    Route::post('/tryouts/{tryout}/results/{attempt}/reopen', [\App\Http\Controllers\Admin\TryoutResultController::class,'reopen'])->name('admin.tryouts.results.reopen');
     // Tryout AI import
     Route::get('/tryouts/{tryout}/questions/ai-import', [\App\Http\Controllers\Admin\TryoutAIImportController::class,'create'])->name('admin.tryouts.questions.aiImport');
     Route::post('/tryouts/{tryout}/questions/ai-import/generate', [\App\Http\Controllers\Admin\TryoutAIImportController::class,'generate'])->name('admin.tryouts.questions.aiImportGenerate');
@@ -468,19 +472,27 @@ Route::prefix('student')->group(function() {
 
     // Student assignments & tryouts list + play
     Route::get('/assignments', [App\Http\Controllers\Student\AssignmentController::class, 'index'])->name('student.assignments.index');
+    Route::get('/assignments/{assignment}/confirmation', [App\Http\Controllers\Student\AssignmentController::class, 'confirmation'])->name('student.assignments.confirmation');
     Route::match(['get','post'],'/assignments/{assignment}/start', [App\Http\Controllers\Student\AssignmentPlayController::class, 'start'])->name('student.assignments.start');
+    Route::get('/assignments/{assignment}/confirmation', [App\Http\Controllers\Student\AssignmentPlayController::class, 'confirmation'])->name('student.assignments.confirmation');
     // new per-question navigation show route (like exam UI)
     Route::get('/assignments/{assignment}/{page}', [App\Http\Controllers\Student\AssignmentPlayController::class, 'show'])->whereNumber('page')->name('student.assignments.show');
     // result page after finish
     Route::get('/assignments/{assignment}/result', [App\Http\Controllers\Student\AssignmentPlayController::class, 'result'])->name('student.assignments.result');
     Route::post('/assignments/{assignment}/answer', [App\Http\Controllers\Student\AssignmentPlayController::class, 'answer'])->name('student.assignments.answer');
     Route::post('/assignments/{assignment}/finish', [App\Http\Controllers\Student\AssignmentPlayController::class, 'finish'])->name('student.assignments.finish');
+    Route::post('/assignments/{assignment}/abort', [App\Http\Controllers\Student\AssignmentPlayController::class, 'abort'])->name('student.assignments.abort');
+    Route::post('/assignments/{assignment}/exit', [App\Http\Controllers\Student\AssignmentPlayController::class, 'exit'])->name('student.assignments.exit');
     Route::get('/tryouts', [App\Http\Controllers\Student\TryoutController::class, 'index'])->name('student.tryouts.index');
+    Route::get('/tryouts/{tryout}/confirmation', [App\Http\Controllers\Student\TryoutController::class, 'confirmation'])->name('student.tryouts.confirmation');
     Route::match(['get','post'],'/tryouts/{tryout}/start', [App\Http\Controllers\Student\TryoutPlayController::class, 'start'])->name('student.tryouts.start');
+    Route::get('/tryouts/{tryout}/confirmation', [App\Http\Controllers\Student\TryoutPlayController::class, 'confirmation'])->name('student.tryouts.confirmation');
     Route::get('/tryouts/{tryout}/{page}', [App\Http\Controllers\Student\TryoutPlayController::class, 'show'])->whereNumber('page')->name('student.tryouts.show');
     Route::get('/tryouts/{tryout}/result', [App\Http\Controllers\Student\TryoutPlayController::class, 'result'])->name('student.tryouts.result');
     Route::post('/tryouts/{tryout}/answer', [App\Http\Controllers\Student\TryoutPlayController::class, 'answer'])->name('student.tryouts.answer');
     Route::post('/tryouts/{tryout}/finish', [App\Http\Controllers\Student\TryoutPlayController::class, 'finish'])->name('student.tryouts.finish');
+    Route::post('/tryouts/{tryout}/abort', [App\Http\Controllers\Student\TryoutPlayController::class, 'abort'])->name('student.tryouts.abort');
+    Route::post('/tryouts/{tryout}/exit', [App\Http\Controllers\Student\TryoutPlayController::class, 'exit'])->name('student.tryouts.exit');
 
     //heartbeat endpoint for monitoring
     Route::post('/heartbeat', [App\Http\Controllers\Student\ExamController::class, 'heartbeat'])->name('student.exams.heartbeat');
