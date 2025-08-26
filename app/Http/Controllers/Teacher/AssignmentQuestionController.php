@@ -12,9 +12,17 @@ class AssignmentQuestionController extends Controller
     public function index(Assignment $assignment)
     {
         $assignment->load('questions');
+        $query = request()->q;
+        $questions = $assignment->questions()
+            ->when($query, fn($q,$term)=>$q->where('question','like',"%$term%"))
+            ->orderBy('order')
+            ->orderBy('id')
+            ->paginate(15)
+            ->withQueryString();
         return inertia('Teacher/Assignments/Questions/Index', [
             'assignment' => $assignment,
-            'questions' => $assignment->questions,
+            'questions' => $questions,
+            'filters' => ['q'=>$query]
         ]);
     }
 

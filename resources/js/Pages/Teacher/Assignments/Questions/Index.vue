@@ -10,13 +10,20 @@
     </div>
     <div class="card border-0 shadow">
       <div class="card-body">
-        <div v-if="!questions.length" class="text-center py-5 text-muted">Belum ada soal.</div>
+        <div class="d-flex flex-wrap justify-content-between align-items-center mb-2" style="gap:6px;">
+          <div class="fw-bold">Daftar Soal</div>
+          <form @submit.prevent="submitSearch" class="d-flex" style="gap:6px;">
+            <input v-model="search" type="text" class="form-control form-control-sm" placeholder="Cari..."/>
+            <button class="btn btn-sm btn-outline-secondary" type="submit"><i class="fa fa-search"/></button>
+          </form>
+        </div>
+        <div v-if="!questions.data.length" class="text-center py-5 text-muted">Belum ada soal.</div>
         <div v-else class="table-responsive">
           <table class="table table-bordered table-striped">
             <thead><tr><th>#</th><th>Pertanyaan</th><th>Jawaban</th><th>Aksi</th></tr></thead>
             <tbody>
-              <tr v-for="(q,i) in questions" :key="q.id">
-                <td>{{ i+1 }}</td>
+              <tr v-for="(q,i) in questions.data" :key="q.id">
+                <td>{{ i+1 + (questions.current_page-1)*questions.per_page }}</td>
                 <td style="max-width:400px">{{ q.question.slice(0,120) }}</td>
                 <td>{{ q.answer || '-' }}</td>
                 <td>
@@ -28,14 +35,17 @@
               </tr>
             </tbody>
           </table>
+          <div class="mt-3"><Pagination :links="questions.links" /></div>
         </div>
       </div>
     </div>
   </div>
 </template>
 <script>
-import { Head, Link } from '@inertiajs/vue3';
+import { Head, Link, router } from '@inertiajs/vue3';
 import TeacherLayout from '../../../../Layouts/Teacher.vue';
-export default { layout: TeacherLayout, components:{Head,Link}, props:{ assignment:Object, questions:Array } }
+import Pagination from '../../../../Components/Pagination.vue';
+import { ref } from 'vue';
+export default { layout: TeacherLayout, components:{Head,Link,Pagination}, props:{ assignment:Object, questions:Object, filters:Object }, setup(props){ const search=ref(props.filters?.q||''); const submitSearch=()=>{ router.get(`/teacher/assignments/${props.assignment.id}/questions`, { q: search.value }); }; return { search, submitSearch }; } }
 </script>
 <style></style>
