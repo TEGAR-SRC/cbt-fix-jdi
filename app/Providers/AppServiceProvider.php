@@ -30,5 +30,19 @@ class AppServiceProvider extends ServiceProvider
             $db = Setting::query()->pluck('value', 'key')->toArray();
             return array_merge($defaults, $db);
         });
+
+        // Share authenticated user basic data (role, name, subject) for role-based UI (sidebar, dashboards)
+        Inertia::share('auth', function () {
+            $user = auth()->user();
+            if(!$user) return null;
+            return [
+                'user' => [
+                    'id' => $user->id,
+                    'name' => $user->name,
+                    'role' => $user->role,
+                    'subject' => $user->subject ?? null,
+                ]
+            ];
+        });
     }
 }
