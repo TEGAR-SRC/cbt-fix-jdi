@@ -2,10 +2,7 @@
     <nav class="navbar navbar-top navbar-expand navbar-dashboard bg-dark text-white border-0 ps-0 pe-2 pb-0 shadow-sm sticky-top neo-blur">
     <div class="container-fluid px-0">
             <div class="d-flex justify-content-between w-100" id="navbarSupportedContent">
-        <div class="d-flex align-items-center gap-2 ps-2">
-            <img v-if="$page.props.branding?.school_logo" :src="$page.props.branding.school_logo" alt="logo" style="height:28px"/>
-                    <span class="fw-semibold text-white" style="text-shadow: 0 1px 2px rgba(0,0,0,.4)">{{ $page.props.branding?.site_name || 'CBT AI' }}</span>
-                </div>
+    <div class="ps-2"></div>
                 <!-- Navbar links -->
                 <ul class="navbar-nav align-items-center">
                     <li class="nav-item dropdown ms-lg-3">

@@ -1,12 +1,11 @@
 <template>
     <nav id="sidebarMenu" class="sidebar d-lg-block bg-gray-800 text-white collapse" data-simplebar>
         <div class="sidebar-inner px-3 pt-3">
-            <div class="d-flex align-items-center justify-content-between mb-3">
-                <div class="d-flex align-items-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" class="bi bi-mortarboard-fill me-2"><path d="M8.211 2.047a.5.5 0 0 0-.422 0l-7.5 3.5a.5.5 0 0 0 .025.917l7.5 3a.5.5 0 0 0 .372 0L14 7.14V13a1 1 0 0 0-1 1v2h3v-2a1 1 0 0 0-1-1V6.739l.686-.275a.5.5 0 0 0 .025-.917l-7.5-3.5Z"/><path d="M4.176 9.032a.5.5 0 0 0-.656.327l-.5 1.7a.5.5 0 0 0 .294.605l4.5 1.8a.5.5 0 0 0 .372 0l4.5-1.8a.5.5 0 0 0 .294-.605l-.5-1.7a.5.5 0 0 0-.656-.327L8 10.466 4.176 9.032Z"/></svg>
-                    <span class="fw-bold text-uppercase" style="font-size:13px; letter-spacing:.5px">{{ brandName }}</span>
+            <div class="sidebar-brand mb-3 text-center">
+                <div class="d-flex flex-column align-items-center">
+                    <img :src="brandLogo" @error="logoError" alt="Logo" class="img-fluid sidebar-logo mb-1" />
+                    <div class="fw-bold text-uppercase small brand-text text-truncate w-100 text-center" title="{{ brandName }}">{{ brandName }}</div>
                 </div>
-                <!-- removed static PRO badge -->
             </div>
             <ul class="nav flex-column sidebar-menu">
                 <li class="nav-item" :class="isActive(dashboardPath)">
@@ -78,6 +77,14 @@ const icons = {
 const userRole = computed(()=> page.props.auth?.user?.role || 'admin');
 // dynamic brand name (sidebar title) using cbt_name > site_name > fallback
 const brandName = computed(()=> (page.props.branding?.cbt_name || page.props.branding?.site_name || 'CBT').trim());
+const brandLogo = computed(()=> page.props.branding?.school_logo || '/assets/images/logo.png');
+let logoErrored = false;
+function logoError(e){
+    if(!logoErrored){
+        logoErrored = true;
+        e.target.src = '/assets/images/logo.png';
+    }
+}
 
 // Dynamic dashboard path per role (ensures guru melihat /teacher/dashboard bukan /admin/dashboard)
 const dashboardPath = computed(()=> {
@@ -225,4 +232,6 @@ function persist(){ localStorage.setItem('sidebar.open', JSON.stringify(state.op
 .highlight-pulse { position:relative; }
 .highlight-pulse::after { content:""; position:absolute; inset:0; border:1px solid rgba(13,110,253,.6); border-radius:8px; animation:pulse 2s infinite; }
 @keyframes pulse { 0%{opacity:.7} 60%{opacity:0; transform:scale(1.08);} 100%{opacity:0;} }
+.sidebar-logo { max-height:72px; max-width:180px; object-fit:contain; filter:drop-shadow(0 2px 4px rgba(0,0,0,.35)); }
+.brand-text { letter-spacing:.6px; }
 </style>
