@@ -13,6 +13,11 @@
             <span><span class="sidebar-icon"><i class="bi bi-file-earmark-text"></i></span><span class="sidebar-text">Ujian</span></span>
           </Link>
         </li>
+        <li class="nav-item" :class="{ 'active': $page.url.startsWith('/operator/tryouts') }">
+          <Link href="/operator/tryouts" class="nav-link d-flex justify-content-between">
+            <span><span class="sidebar-icon"><i class="bi bi-clipboard-check"></i></span><span class="sidebar-text">Tryout</span></span>
+          </Link>
+        </li>
         <li class="nav-item" :class="{ 'active': $page.url.startsWith('/operator/questions') }">
           <Link href="/operator/questions" class="nav-link d-flex justify-content-between">
             <span><span class="sidebar-icon"><i class="bi bi-collection"></i></span><span class="sidebar-text">Bank Soal</span></span>

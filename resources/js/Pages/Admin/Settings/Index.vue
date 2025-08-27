@@ -27,6 +27,10 @@
               <div class="p-2 border rounded bg-white d-inline-block">
                 <img :src="preview || settings.school_logo" alt="logo" style="height:60px"/>
               </div>
+              <div class="form-check mt-2" v-if="settings.school_logo && !preview">
+                <input class="form-check-input" type="checkbox" v-model="form.remove_logo" id="removeLogoChk">
+                <label class="form-check-label" for="removeLogoChk">Hapus logo</label>
+              </div>
             </div>
           </div>
           <div class="mt-4 d-flex justify-content-end">
@@ -53,6 +57,7 @@ export default {
       site_name: props.settings.site_name || '',
       cbt_name: props.settings.cbt_name || '',
       logo: null,
+      remove_logo: false,
     })
     const preview = ref('')
     const file = ref(null)
@@ -67,7 +72,8 @@ export default {
       const data = new FormData()
       data.append('site_name', form.site_name)
       data.append('cbt_name', form.cbt_name)
-      if (form.logo) data.append('logo', form.logo)
+  if (form.logo) data.append('logo', form.logo)
+  if (form.remove_logo) data.append('remove_logo', '1')
       router.post('/admin/settings', data)
     }
 

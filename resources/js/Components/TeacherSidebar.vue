@@ -30,6 +30,14 @@
             </span>
           </Link>
         </li>
+        <li class="nav-item" :class="{ 'active': $page.url.startsWith('/teacher/tryouts') }">
+          <Link href="/teacher/tryouts" class="nav-link d-flex justify-content-between">
+            <span>
+              <span class="sidebar-icon"><i class="bi bi-clipboard-check"></i></span>
+              <span class="sidebar-text">Tryout</span>
+            </span>
+          </Link>
+        </li>
         <li class="nav-item" :class="{ 'active': $page.url.startsWith('/teacher/questions') }">
           <Link href="/teacher/questions" class="nav-link d-flex justify-content-between">
             <span>

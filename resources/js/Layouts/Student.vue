@@ -1,18 +1,8 @@
 <template>
-    <nav class="navbar navbar-expand-lg navbar-transparent navbar-dark navbar-theme-primary mb-4 shadow">
-        <div class="container position-relative">
-            <Link class="navbar-brand me-lg-3" href="/student/dashboard">
-                <img class="navbar-brand-dark" src="/assets/images/logo.png" style="height:70px">
-            </Link>
-            <div class="collapse navbar-collapse" id="navbarCollapse">
-                <ul class="navbar-nav me-auto mb-2 mb-md-0"></ul>
-                <form class="d-flex" v-if="$page.props.auth.student">
-                    <Link href="/students/logout" method="post" class="btn btn-secondary shadow" as="button">LOGOUT</Link>
-                </form>
-            </div>
+    <div class="container py-4">
+        <div v-if="$page.props.auth?.student" class="d-flex justify-content-end mb-3">
+            <Link href="/students/logout" method="post" as="button" class="btn btn-sm btn-outline-danger">Logout</Link>
         </div>
-    </nav>
-    <div class="container">
         <div v-if="$page.props.session && $page.props.session.error" class="alert alert-danger alert-dismissible fade show" role="alert">
             {{$page.props.session.error}}
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
@@ -41,6 +31,6 @@
 
 </script>
 
-<style>
-
+<style scoped>
+.container{ max-width: 980px; }
 </style>

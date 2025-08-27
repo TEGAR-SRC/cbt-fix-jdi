@@ -151,11 +151,13 @@ function buildAdminBaseGroups(){
 const groups = computed(() => {
     const role = userRole.value;
     if(role === 'teacher') {
-        const allowed = new Set(['exams','sessions','assignments','questions','reports','monitoring','control','classrooms','students']);
+        // added 'tryouts' so guru melihat menu Tryout (ditampilkan setelah Tugas Harian)
+        const allowed = new Set(['exams','sessions','assignments','tryouts','questions','reports','monitoring','control','classrooms','students']);
         const teacherRouteMap = {
             exams: '/teacher/exams',
             sessions: '/teacher/exam-sessions', // note admin uses underscore variant
             assignments: '/teacher/assignments',
+            tryouts: '/teacher/tryouts',
             questions: '/teacher/questions',
             reports: '/teacher/reports',
             monitoring: '/teacher/monitor',
@@ -166,7 +168,12 @@ const groups = computed(() => {
         return buildAdminBaseGroups()
             .map(g => {
                 // clone & filter items
-                const items = g.items.filter(it => allowed.has(it.key)).map(it => ({...it, href: teacherRouteMap[it.key] || it.href}));
+                let items = g.items.filter(it => allowed.has(it.key)).map(it => ({...it, href: teacherRouteMap[it.key] || it.href}));
+                // ensure ordering: place tryouts right after assignments if both exist
+                if(g.key === 'ujian') {
+                    const order = ['exams','sessions','assignments','tryouts','questions','reports'];
+                    items = items.sort((a,b)=> order.indexOf(a.key) - order.indexOf(b.key));
+                }
                 if(g.key === 'monitor') {
                     return { ...g, label: 'Monitoring & Kontrol', items };
                 }
@@ -181,6 +188,7 @@ const groups = computed(() => {
                 { key: 'exams', label: 'Ujian', href: '/operator/exams', icon: icons.exams },
                 { key: 'sessions', label: 'Sesi Ujian', href: '/operator/exam-sessions', icon: icons.session },
                 { key: 'assignments', label: 'Tugas Harian', href: '/operator/assignments', icon: icons.assignment },
+                { key: 'tryouts', label: 'Tryout', href: '/operator/tryouts', icon: icons.tryout },
                 { key: 'questions', label: 'Bank Soal', href: '/operator/questions', icon: icons.assignment },
                 { key: 'reports', label: 'Laporan Nilai', href: '/operator/reports', icon: icons.reports },
             ]},
